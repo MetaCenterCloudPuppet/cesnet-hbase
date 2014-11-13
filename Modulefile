@@ -1,0 +1,10 @@
+name          'cesnet-hbase'
+version       '0.1.0'
+source        '<%= metadata.source %>'
+author        'František Dvořák <valtri@civ.zcu.cz>'
+license       'ASL 2.0'
+summary       'HBase Cluster'
+description   'HBase Cluster on Fedora'
+project_page  'scientific.zcu.cz'
+
+dependency 'puppetlabs/stdlib'
