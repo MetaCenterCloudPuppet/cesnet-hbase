@@ -3,12 +3,14 @@
 # HBase Cluster setup.
 #
 # Before installing with Hadoop:
-# - create hbase user on Hadoop HDFS Name Node
+# - create hbase user on Hadoop HDFS Name Node (or install HBase)
 # - create /hbase HDFS directory:
 #   hdfs dfs -mkdir /hbase
 #   hdfs dfs -chown hbase:hbase /hbase
-# - if enabled https, hbase needs access to http secret file:
+# - if enabled https in Hadoop, hbase needs access to http secret file:
 #   setfacl -m u:hbase:r /etc/hadoop/security/http-auth-signature-secret
+#
+# Web UI: ports 60010, 60030, https is not supported
 #
 # === Parameters
 #
