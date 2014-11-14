@@ -13,6 +13,13 @@ class hbase::service {
     }
   }
 
+  if $hbase::zookeeper_hostname == $::fqdn and !$hbase::external_zookeeper {
+    service { 'hbase-zookeeper':
+      ensure => running,
+      enable => true,
+    }
+  }
+
   if member($hbase::slaves, $::fqdn) {
     service { 'hbase-regionserver':
       ensure => running,

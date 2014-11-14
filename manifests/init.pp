@@ -7,6 +7,8 @@
 # - create /hbase HDFS directory:
 #   hdfs dfs -mkdir /hbase
 #   hdfs dfs -chown hbase:hbase /hbase
+# - if enabled https, hbase needs access to http secret file:
+#   setfacl -m u:hbase:r /etc/hadoop/security/http-auth-signature-secret
 #
 # TODO: hbase-zookeeper
 #
@@ -17,6 +19,12 @@
 #
 # [*master_hostname*] (undef)
 #   HBase master node.
+#
+# [*zookeeper_hostname*] required
+#   Zookeeper to use. May be "localhost" in non-cluster mode.
+#
+# [*external_zookeeper*] (false)
+#   Don't launch HBase Zookeeper.
 #
 # [*slaves*] ([])
 #   HBase regionserver nodes.
@@ -34,6 +42,8 @@ class hbase (
 
   $hdfs_hostname = $hbase::params::hdfs_hostname,
   $master_hostname = undef,
+  $zookeeper_hostname,
+  $external_zookeeper = $hbase::params::external_zookeeper,
   $slaves = [],
   $realm,
   $properties = $hbase::params::properties,

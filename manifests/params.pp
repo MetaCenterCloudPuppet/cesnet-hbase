@@ -19,4 +19,5 @@ class hbase::params {
   }
 
   $hdfs_hostname = 'localhost'
+  $external_zookeeper = false
 }
