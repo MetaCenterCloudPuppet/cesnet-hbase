@@ -10,8 +10,6 @@
 # - if enabled https, hbase needs access to http secret file:
 #   setfacl -m u:hbase:r /etc/hadoop/security/http-auth-signature-secret
 #
-# TODO: hbase-zookeeper
-#
 # === Parameters
 #
 # [*hdfs_hostname*] (localhost)
@@ -58,10 +56,18 @@ class hbase (
       'hbase.master.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
       'hbase.regionserver.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.regionserver.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
+      'hbase.security.authorization' => true,
+      'hbase.coprocessor.region.classes' => 'org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.token.TokenProvider',
+      'hbase.coprocessor.master.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
+      'hbase.coprocessor.regionserver.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
+      'hbase.security.exec.permissions.checks' => true,
+      'hbase.rpc.protection' => 'auth-conf',
     }
   }
   $all_descriptions = {
     'hbase.security.authentication' => 'simple, kerberos',
+    'hbase.coprocessor.region.classes' =>  'for enabling full security and ACLs',
+    'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
   }
 
   $props = merge($sec_properties, $properties)
