@@ -31,5 +31,26 @@ class hbase::config {
       mode  => '0400',
       alias => 'hbase.service.keytab',
     }
+
+    if $hbase::features["restarts"] {
+      if $master_hostname == $::fqdn {
+        file { "/etc/cron.d/hbase-master-restarts":
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          alias   => "hbase-master-cron",
+          content => template("hbase/cron-master-restart.erb"),
+        }
+      }
+      if member($slaves, $::fqdn) {
+        file { "/etc/cron.d/hbase-regionserver-restarts":
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          alias   => "hbase-regionserver-cron",
+          content => template("hbase/cron-regionserver-restart.erb"),
+        }
+      }
+    }
   }
 }

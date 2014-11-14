@@ -36,6 +36,8 @@
 #
 # [*descriptions*]
 #
+# [*features*]
+#
 class hbase (
   $package_name = $hbase::params::package_name,
   $service_name = $hbase::params::service_name,
@@ -48,6 +50,7 @@ class hbase (
   $realm,
   $properties = $hbase::params::properties,
   $descriptions = $hbase::params::descriptions,
+  $features = [],
 ) inherits hbase::params {
   include stdlib
 
