@@ -17,6 +17,13 @@ class hbase::config {
     content => template('hbase/hbase-site.xml.erb'),
   }
 
+  file { '/etc/hbase/regionservers':
+    owner   => 'root',
+    group   => 'root',
+    alias   => 'regionservers',
+    content => template('hbase/regionservers.erb'),
+  }
+
   if $hbase::realm {
     file { '/etc/security/keytab/hbase.service.keytab':
       owner => 'hbase',
