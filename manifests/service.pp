@@ -13,7 +13,7 @@ class hbase::service {
     }
   }
 
-  if $hbase::zookeeper_hostname == $::fqdn and !$hbase::external_zookeeper {
+  if member($hbase::zookeeper_hostnames, $::fqdn) and !$hbase::external_zookeeper {
     service { 'hbase-zookeeper':
       ensure => running,
       enable => true,
