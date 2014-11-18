@@ -1,0 +1,33 @@
+#! /bin/sh
+
+#
+# Helper script for checking and changing status of all HBAse daemons
+# relevant for this node.
+#
+
+if [ -z "$1" ]; then
+	echo "Usage: $0 start|stop|status|..."
+	echo "       $0 clean"
+	exit 1
+fi
+
+while [ -n "$1" ]; do
+
+	case "$1" in
+	clean)
+		rm -rfv /var/log/hbase-*/* 2>/dev/null || :
+		;;
+	start|restart|*)
+		<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn -%>echo "zookeeper $1"; systemctl $1 hbase-zookeeper<%end%>
+		<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>echo "master $1"; systemctl $1 hbase-master<%end%>
+		<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>echo "regionserver $1"; systemctl $1 hbase-regionserver<%end%>
+		;;
+	stop)
+		<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>echo "regionserver $1"; systemctl $1 hbase-regionserver<%end%>
+		<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>echo "master $1"; systemctl $1 hbase-master<%end%>
+		<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn -%>echo "zookeeper $1"; systemctl $1 hbase-zookeeper<%end%>
+		;;
+	esac
+
+	shift
+done

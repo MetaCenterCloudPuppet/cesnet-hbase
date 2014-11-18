@@ -37,6 +37,8 @@
 # [*descriptions*]
 #
 # [*features*]
+#   * restarts
+#   * hbmanager
 #
 class hbase (
   $package_name = $hbase::params::package_name,

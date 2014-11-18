@@ -53,4 +53,13 @@ class hbase::config {
       }
     }
   }
+
+  if $hbase::features["hbmanager"] {
+    file { '/usr/local/sbin/hbmanager':
+      mode    => '0755',
+      alias  => 'hbmanager',
+      content => template('hbase/hbmanager.erb'),
+    }
+  }
+
 }
