@@ -64,11 +64,11 @@ class hbase (
       'hbase.regionserver.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.regionserver.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
       'hbase.security.authorization' => true,
-      'hbase.coprocessor.region.classes' => 'org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.token.TokenProvider',
       'hbase.coprocessor.master.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
-      'hbase.coprocessor.regionserver.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
+      'hbase.coprocessor.region.classes' => 'org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController',
       'hbase.security.exec.permissions.checks' => true,
       'hbase.rpc.protection' => 'auth-conf',
+      'hbase.rpc.engine' => 'org.apache.hadoop.hbase.ipc.SecureRpcEngine',
     }
   }
   $all_descriptions = {
