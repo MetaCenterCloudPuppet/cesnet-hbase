@@ -33,22 +33,22 @@ class hbase::config {
     }
 
     if $hbase::features["restarts"] {
-      if $master_hostname == $::fqdn {
-        file { "/etc/cron.d/hbase-master-restarts":
+      if $hbase::master_hostname == $::fqdn {
+        file { '/etc/cron.d/hbase-master-restarts':
           owner   => 'root',
           group   => 'root',
           mode    => '0644',
-          alias   => "hbase-master-cron",
-          content => template("hbase/cron-master-restart.erb"),
+          alias   => 'hbase-master-cron',
+          content => template('hbase/cron-master-restart.erb'),
         }
       }
-      if member($slaves, $::fqdn) {
-        file { "/etc/cron.d/hbase-regionserver-restarts":
+      if member($hbase::slaves, $::fqdn) {
+        file { '/etc/cron.d/hbase-regionserver-restarts':
           owner   => 'root',
           group   => 'root',
           mode    => '0644',
-          alias   => "hbase-regionserver-cron",
-          content => template("hbase/cron-regionserver-restart.erb"),
+          alias   => 'hbase-regionserver-cron',
+          content => template('hbase/cron-regionserver-restart.erb'),
         }
       }
     }
@@ -57,7 +57,7 @@ class hbase::config {
   if $hbase::features["hbmanager"] {
     file { '/usr/local/sbin/hbmanager':
       mode    => '0755',
-      alias  => 'hbmanager',
+      alias   => 'hbmanager',
       content => template('hbase/hbmanager.erb'),
     }
   }
