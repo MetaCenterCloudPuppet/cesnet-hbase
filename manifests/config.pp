@@ -21,6 +21,63 @@ class hbase::config {
     }
   }
 
+  # setup directory layout on HDFS namenode
+  if $hbase::hdfs_hostname == $::fqdn {
+    $realm = $hbase::realm
+    $env = [ 'KRB5CCNAME=FILE:/tmp/krb5cc_nn_puppet' ]
+    $path = '/sbin:/usr/sbin:/bin:/usr/bin'
+    $touchfile = '/var/lib/hadoop-hdfs/.puppet-hbase-dir-created'
+
+    # create user/group if needed (we don't need to install hbase just for user, unless it is colocated with the master)
+    group { 'hbase':
+      ensure => present,
+      system => true,
+    }
+    user { 'hbase':
+      ensure     => present,
+      system     => true,
+      comment    => 'Apache HBase',
+      gid        => 'hbase',
+      home       => '/var/lib/hbase',
+      managehome => true,
+      password   => '!!',
+      shell      => '/sbin/nologin',
+      require    => Group['hbase'],
+    }
+    ->
+    # destroy it only when needed though
+    exec { 'hbase-kdestroy':
+      command     => 'kdestroy',
+      path        => $path,
+      environment => $env,
+      onlyif      => "test -n \"${realm}\"",
+      creates     => $touchfile,
+    }
+    ->
+    exec { 'hbase-kinit':
+      command     => "runuser hdfs -s /bin/bash /bin/bash -c \"kinit -k nn/${::fqdn}@${realm} -t /etc/security/keytab/nn.service.keytab\"",
+      path        => $path,
+      environment => $env,
+      onlyif      => "test -n \"${realm}\"",
+      creates     => $touchfile,
+    }
+    ->
+    exec { 'hbase-dir':
+      command     => 'runuser hdfs -s /bin/bash /bin/bash -c "hdfs dfs -mkdir /hbase"',
+      path        => $path,
+      environment => $env,
+      unless      => 'runuser hdfs -s /bin/bash /bin/bash -c "hdfs dfs -test -d /hbase"',
+      creates     => $touchfile,
+    }
+    ->
+    exec { 'hbase-chown':
+      command     => "runuser hdfs -s /bin/bash /bin/bash -c \"hdfs dfs -chown hbase:hbase /hbase\" && touch ${touchfile}",
+      path        => $path,
+      environment => $env,
+      creates     => $touchfile,
+    }
+  }
+
   # configuration needed for daemons
   if $hbase::daemons {
 

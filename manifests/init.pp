@@ -2,25 +2,32 @@
 #
 # HBase Cluster setup.
 #
-# Before installing with Hadoop:
-# - create hbase user on Hadoop HDFS Name Node (or install HBase)
-# - create /hbase HDFS directory:
-#   hdfs dfs -mkdir /hbase
-#   hdfs dfs -chown hbase:hbase /hbase
-# - if enabled https in Hadoop, hbase needs access to http secret file:
+# Installation notes:
+#
+# 1) Hadoop cluser needs to be already completely deployed (HDFS namenode and datanodes)
+#
+# 2) hbase class needs to be launch also on HDFS namenode,
+#    if not:
+#  - create hbase user on Hadoop HDFS Name Node (or install HBase)
+#  - create /hbase HDFS directory:
+#      hdfs dfs -mkdir /hbase
+#      hdfs dfs -chown hbase:hbase /hbase
+#
+# 3) if enabled https in Hadoop, hbase needs access to http secret file and Kerberos keyfile:
 #   setfacl -m u:hbase:r /etc/hadoop/security/http-auth-signature-secret
 #
 # Web UI: ports 60010, 60030, https is not supported
 #
-# Any change will be done only on hostnames specified here:
+# Any changes will be done only on these hostnames:
 # * master_hostname
 # * zookeeper_hostnames (if external_zookeeper is false)
 # * slaves
 # * frontends
+# * (hdfs_hostname: only 'kinit' and 'hdfs dfs' commands)
 #
 # === Parameters
 #
-# [*hdfs_hostname*] (localhost)
+# [*hdfs_hostname*] required
 #   Main node of Hadoop (HDFS Name Node).
 #
 # [*master_hostname*] (undef)
@@ -53,7 +60,7 @@ class hbase (
   $package_name = $hbase::params::package_name,
   $service_name = $hbase::params::service_name,
 
-  $hdfs_hostname = $hbase::params::hdfs_hostname,
+  $hdfs_hostname,
   $master_hostname = undef,
   $zookeeper_hostnames,
   $external_zookeeper = $hbase::params::external_zookeeper,
