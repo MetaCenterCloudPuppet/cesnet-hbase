@@ -3,5 +3,7 @@
 class hbase::install {
   include stdlib
 
-  ensure_packages($hbase::package_name)
+  if ($hbase::daemons or $hbase::frontend) {
+    ensure_packages($hbase::package_name)
+  }
 }

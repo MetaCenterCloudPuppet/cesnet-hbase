@@ -12,6 +12,12 @@
 #
 # Web UI: ports 60010, 60030, https is not supported
 #
+# Any change will be done only on hostnames specified here:
+# * master_hostname
+# * zookeeper_hostnames (if external_zookeeper is false)
+# * slaves
+# * frontends
+#
 # === Parameters
 #
 # [*hdfs_hostname*] (localhost)
@@ -28,6 +34,9 @@
 #
 # [*slaves*] ([])
 #   HBase regionserver nodes.
+#
+# [*frontends*] ([])
+#   Array of frontend hostnames. Package and configuration is needed on frontends.
 #
 # [*realm*] required
 #   Kerberos realm, or empty string to disable security.
@@ -49,12 +58,22 @@ class hbase (
   $zookeeper_hostnames,
   $external_zookeeper = $hbase::params::external_zookeeper,
   $slaves = [],
+  $frontends = [],
   $realm,
   $properties = $hbase::params::properties,
   $descriptions = $hbase::params::descriptions,
   $features = [],
 ) inherits hbase::params {
   include stdlib
+
+  if $hbase::master_hostname == $::fqdn
+     or member($hbase::zookeeper_hostnames, $::fqdn) and !$hbase::external_zookeeper
+     or member($hbase::slaves, $::fqdn) {
+    $daemons = true
+  }
+  if member($hbase::frontends, $::fqdn) {
+    $frontend = true
+  }
 
   if $hbase::realm {
     $sec_properties = {
