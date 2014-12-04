@@ -15,7 +15,11 @@ class hbase::params {
         master => 'hbase-master',
         regionserver => 'hbase-regionserver',
       }
+      $confdir = '/etc/hbase/conf'
       $external_zookeeper = true
+      $properties = {
+        'hbase.tmp.dir' => '/var/cache/hbase',
+      }
     }
     'RedHat': {
       $packages = {
@@ -29,12 +33,19 @@ class hbase::params {
         regionserver => 'hbase-regionserver',
         zookeeper => 'hbase-zookeeper',
       }
+      $confdir = '/etc/hbase'
       $external_zookeeper = false
+      $properties = {
+        'hbase.tmp.dir' => '/var/lib/hbase/cache',
+      }
     }
     default: {
       fail("${::operatingsystem} not supported")
     }
   }
 
+  $descriptions = {
+    'hbase.tmp.dir' => 'The temporary directory.',
+  }
   $perform = false
 }

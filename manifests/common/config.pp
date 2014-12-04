@@ -1,12 +1,12 @@
 class hbase::common::config {
-  file { '/etc/hbase/hbase-site.xml':
+  file { "${hbase::confdir}/hbase-site.xml":
     owner   => 'root',
     group   => 'root',
     alias   => 'hbase-site.xml',
     content => template('hbase/hbase-site.xml.erb'),
   }
 
-  file { '/etc/hbase/regionservers':
+  file { "${hbase::confdir}/regionservers":
     owner   => 'root',
     group   => 'root',
     alias   => 'regionservers',
