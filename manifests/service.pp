@@ -1,29 +1,15 @@
 # == Class hbase::service
 #
-# This class is meant to be called from hbase
-# It ensure the service is running
+# This class is meant to be called from hbase.
+#
+# It ensures the services are running.
 #
 class hbase::service {
-  include stdlib
-
-  if $hbase::master_hostname == $::fqdn {
-    service { 'hbase-master':
-      ensure => running,
-      enable => true,
-    }
-  }
+  if $hbase::master_hostname == $::fqdn { contain hbase::master::service }
 
   if member($hbase::zookeeper_hostnames, $::fqdn) and !$hbase::external_zookeeper {
-    service { 'hbase-zookeeper':
-      ensure => running,
-      enable => true,
-    }
+    contain hbase::zookeeper::service
   }
 
-  if member($hbase::slaves, $::fqdn) {
-    service { 'hbase-regionserver':
-      ensure => running,
-      enable => true,
-    }
-  }
+  if member($hbase::slaves, $::fqdn) { contain hbase::regionserver::service }
 }

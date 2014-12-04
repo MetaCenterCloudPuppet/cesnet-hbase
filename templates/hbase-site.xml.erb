@@ -29,7 +29,7 @@
   </property>
   <property>
     <name>hbase.rootdir</name>
-    <value>hdfs://<%= @hdfs_hostname -%>:8020/hbase</value>
+    <value>hdfs://<%= scope.lookupvar('hbase::hdfs_hostname') -%>:8020/hbase</value>
     <description>The directory shared by RegionServers.
     </description>
   </property>
@@ -70,12 +70,12 @@
 
 <% properties = scope.lookupvar('hbase::props').select { |name,value| value != '::undef' } -%>
 <% properties.keys.each do |p| -%>
-<%if @descs[p] -%>
-  <!-- <%= @descs[p] %> -->
+<%if scope.lookupvar('hbase::descs')[p] -%>
+  <!-- <%= scope.lookupvar('hbase::descs')[p] %> -->
 <% end -%>
   <property>
     <name><%= p -%></name>
-    <value><%= @props[p] -%></value>
+    <value><%= scope.lookupvar('hbase::props')[p] -%></value>
   </property>
 <% end -%>
 </configuration>

@@ -18,14 +18,20 @@ while [ -n "$1" ]; do
 		rm -rfv /var/log/hbase-*/* 2>/dev/null || :
 		;;
 	start|restart|*)
-		<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn -%>echo "zookeeper $1"; systemctl $1 hbase-zookeeper<%end%>
-		<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>echo "master $1"; systemctl $1 hbase-master<%end%>
-		<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>echo "regionserver $1"; systemctl $1 hbase-regionserver<%end%>
+<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>		echo "zookeeper $1"; service <%= scope.lookupvar('hbase::daemons')['zookeeper'] -%> $1
+<%end-%>
+<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>		echo "master $1"; service <%= scope.lookupvar('hbase::daemons')['master'] -%> $1
+<%end-%>
+<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>		echo "regionserver $1"; service <%= scope.lookupvar('hbase::daemons')['regionserver'] -%> $1
+<%end-%>
 		;;
 	stop)
-		<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>echo "regionserver $1"; systemctl $1 hbase-regionserver<%end%>
-		<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>echo "master $1"; systemctl $1 hbase-master<%end%>
-		<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn -%>echo "zookeeper $1"; systemctl $1 hbase-zookeeper<%end%>
+<%if scope.lookupvar('hbase::slaves').include? @fqdn -%>		echo "regionserver $1"; service <%= scope.lookupvar('hbase::daemons')['regionserver'] -%> $1
+<%end-%>
+<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>		echo "master $1"; service <%= scope.lookupvar('hbase::daemons')['master'] -%> $1
+<%end-%>
+<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>		echo "zookeeper $1"; service <%= scope.lookupvar('hbase::daemons')['zookeeper'] -%> $1
+<%end-%>
 		;;
 	esac
 

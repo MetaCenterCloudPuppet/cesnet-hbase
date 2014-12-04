@@ -70,17 +70,9 @@ class hbase (
   $properties = $hbase::params::properties,
   $descriptions = $hbase::params::descriptions,
   $features = [],
+  $perform = $hbase::params::perform,
 ) inherits hbase::params {
   include stdlib
-
-  if $hbase::master_hostname == $::fqdn
-     or member($hbase::zookeeper_hostnames, $::fqdn) and !$hbase::external_zookeeper
-     or member($hbase::slaves, $::fqdn) {
-    $daemons = true
-  }
-  if member($hbase::frontends, $::fqdn) {
-    $frontend = true
-  }
 
   if $hbase::realm {
     $sec_properties = {
@@ -106,9 +98,14 @@ class hbase (
   $props = merge($sec_properties, $properties)
   $descs = merge($all_descriptions, $descriptions)
 
-  class { 'hbase::install': } ->
-  class { 'hbase::config': } ~>
-  class { 'hbase::service': } ->
-  Class['hbase']
+  if ($hbase::perform) {
+    include hbase::install
+    include hbase::config
+    include hbase::service
 
+    Class['hbase::install'] ->
+    Class['hbase::config'] ~>
+    Class['hbase::service'] ->
+    Class['hbase']
+  }
 }
