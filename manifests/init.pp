@@ -67,8 +67,8 @@ class hbase (
   $slaves = [],
   $frontends = [],
   $realm,
-  $properties = $hbase::params::properties,
-  $descriptions = $hbase::params::descriptions,
+  $properties = undef,
+  $descriptions = undef,
   $features = [],
   $perform = $hbase::params::perform,
 ) inherits hbase::params {
@@ -95,8 +95,8 @@ class hbase (
     'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
   }
 
-  $props = merge($sec_properties, $properties)
-  $descs = merge($all_descriptions, $descriptions)
+  $props = merge($hbase::params::properties, $sec_properties, $properties)
+  $descs = merge($hbase::params::descriptions, $all_descriptions, $descriptions)
 
   if ($hbase::perform) {
     include hbase::install
