@@ -18,7 +18,7 @@ class hbase::params {
       $confdir = '/etc/hbase/conf'
       $external_zookeeper = true
       $properties = {
-        'hbase.tmp.dir' => '/var/cache/hbase',
+        'hbase.tmp.dir' => '/var/lib/hbase',
       }
     }
     'RedHat': {

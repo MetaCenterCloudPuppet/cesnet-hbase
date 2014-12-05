@@ -22,12 +22,6 @@
 -->
 <configuration>
   <property>
-    <name>hbase.tmp.dir</name>
-    <value>/var/cache/hbase</value>
-    <description>The temporary directory.
-    </description>
-  </property>
-  <property>
     <name>hbase.rootdir</name>
     <value>hdfs://<%= scope.lookupvar('hbase::hdfs_hostname') -%>:8020/hbase</value>
     <description>The directory shared by RegionServers.
