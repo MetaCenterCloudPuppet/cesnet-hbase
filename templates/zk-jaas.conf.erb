@@ -1,0 +1,7 @@
+Client {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=true
+  useTicketCache=false
+  keyTab="/etc/security/keytab/hbase.service.keytab"
+  principal="hbase/<%= @fqdn -%>@<%= scope.lookupvar('hbase::realm') -%>";
+};

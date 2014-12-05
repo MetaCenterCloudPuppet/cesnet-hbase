@@ -12,4 +12,18 @@ class hbase::common::config {
     alias   => 'regionservers',
     content => template('hbase/regionservers.erb'),
   }
+
+  file { "${hbase::confdir}/hbase-env.sh":
+    owner   => 'root',
+    group   => 'root',
+    content => template('hbase/hbase-env.sh.erb'),
+  }
+
+  if $hbase::realm {
+    file { "${hbase::confdir}/zk-jaas.conf":
+      owner   => 'root',
+      group   => 'root',
+      content => template('hbase/zk-jaas.conf.erb'),
+    }
+  }
 }

@@ -1,19 +1,12 @@
 class hbase::common::daemons::config {
+  contain hbase::common::keytab
+
   if "${::osfamily}/${::operatingsystem}" == 'RedHat/Fedora' {
     file { '/etc/security/limits.d/90-hbase.conf':
       owner  => 'root',
       group  => 'root',
       alias  => 'limits.conf',
       source => 'puppet:///modules/hbase/limits.conf',
-    }
-  }
-
-  if $hbase::realm {
-    file { '/etc/security/keytab/hbase.service.keytab':
-      owner => 'hbase',
-      group => 'hbase',
-      mode  => '0400',
-      alias => 'hbase.service.keytab',
     }
   }
 
