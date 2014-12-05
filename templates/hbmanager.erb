@@ -16,6 +16,7 @@ while [ -n "$1" ]; do
 	case "$1" in
 	clean)
 		rm -rfv /var/log/hbase-*/* 2>/dev/null || :
+		rm -rfv /var/log/hbase/* 2>/dev/null || :
 		;;
 	start|restart|*)
 <%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>		echo "zookeeper $1"; service <%= scope.lookupvar('hbase::daemons')['zookeeper'] -%> $1
