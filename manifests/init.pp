@@ -13,8 +13,7 @@
 #      hdfs dfs -mkdir /hbase
 #      hdfs dfs -chown hbase:hbase /hbase
 #
-# 3) if enabled https in Hadoop, hbase needs access to http secret file and Kerberos keyfile:
-#   setfacl -m u:hbase:r /etc/hadoop/security/http-auth-signature-secret
+# 3) if enabled https in Hadoop, hbase needs access to http secret file and Kerberos keyfile ==> enable https also in hbase
 #
 # Web UI: ports 60010, 60030, https is not supported
 #
@@ -61,6 +60,8 @@
 #   * restarts
 #   * hbmanager
 #
+# [*https*] undef
+#
 class hbase (
   $package_name = $hbase::params::package_name,
   $service_name = $hbase::params::service_name,
@@ -75,6 +76,7 @@ class hbase (
   $properties = undef,
   $descriptions = undef,
   $features = [],
+  $https = undef,
   $perform = $hbase::params::perform,
 ) inherits hbase::params {
   include stdlib

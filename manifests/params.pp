@@ -48,4 +48,9 @@ class hbase::params {
     'hbase.tmp.dir' => 'The temporary directory.',
   }
   $perform = false
+
+  $hbase_homedir = $::osfamily ? {
+    'RedHat' => '/var/lib/hbase',
+    'Debian' => '/var/lib/hbase',
+  }
 }
