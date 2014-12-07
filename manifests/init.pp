@@ -47,6 +47,11 @@
 #
 # [*realm*] required
 #   Kerberos realm, or empty string to disable security.
+#   To enable security, there are required:
+#   * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
+#   * /etc/security/keytab/hbase.service.keytab
+#   * enabled security on HDFS
+#   * enabled security on zookeeper, if external
 #
 # [*properties*]
 #

@@ -1,4 +1,6 @@
 class hbase::common::config {
+  $realm = $hbase::realm
+
   file { "${hbase::confdir}/hbase-site.xml":
     owner   => 'root',
     group   => 'root',
