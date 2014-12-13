@@ -55,7 +55,7 @@ class hbase::hdfs {
   }
   ->
   exec { 'hbase-kinit':
-    command     => "kinit -k nn/${::fqdn}@${realm} -t /etc/security/keytab/nn.service.keytab",
+    command     => "kinit -k -t /etc/security/keytab/nn.service.keytab nn/${::fqdn}@${realm}",
     path        => $path,
     environment => $env,
     onlyif      => "test -n \"${realm}\"",
