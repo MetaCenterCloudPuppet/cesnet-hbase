@@ -27,7 +27,7 @@
 # === Parameters
 #
 # [*hdfs_hostname*] required
-#   Main node of Hadoop (HDFS Name Node).
+#   Main node of Hadoop (HDFS Name Node). Used for launching 'hdfs dfs' commands there.
 #
 # [*master_hostname*] (undef)
 #   HBase master node.
