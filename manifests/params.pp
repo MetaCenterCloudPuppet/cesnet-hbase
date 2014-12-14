@@ -53,4 +53,9 @@ class hbase::params {
     'RedHat' => '/var/lib/hbase',
     'Debian' => '/var/lib/hbase',
   }
+
+  $alternatives = $::osfamily ? {
+    'RedHat' => undef,
+    'Debian' => 'cluster',
+  }
 }

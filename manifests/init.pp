@@ -77,6 +77,7 @@ class hbase (
   $descriptions = undef,
   $features = [],
   $https = undef,
+  $alternatives = $params::alternatives,
   $perform = $hbase::params::perform,
 ) inherits hbase::params {
   include stdlib
