@@ -16,12 +16,14 @@ class hbase::common::postinstall {
       path    => $path,
       creates => "/etc/hbase/conf.${confname}",
     }
+    ->
     exec { 'hbase-install-alternatives':
       command     => "${altcmd} --install /etc/hbase/conf hbase-conf /etc/hbase/conf.${confname} 50",
       path        => $path,
       refreshonly => true,
       subscribe   => Exec['hbase-copy-config'],
     }
+    ->
     exec { 'hbase-set-alternatives':
       command     => "${altcmd} --set hbase-conf /etc/hbase/conf.${confname}",
       path        => $path,
