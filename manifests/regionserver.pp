@@ -1,6 +1,6 @@
 # == Class hbase::regionserver
 #
-# Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
+# HBase worker node. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
 #
 class hbase::regionserver {
   include 'hbase::regionserver::install'
