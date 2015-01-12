@@ -22,20 +22,20 @@ class hbase::common::daemons::config {
     file { "${hbase::hbase_homedir}/hadoop.keytab":
       owner  => 'hbase',
       group  => 'hbase',
-      mode   => '0640',
+      mode   => '0600',
       source => '/etc/security/keytab/http.service.keytab',
     }
     file { "${hbase::hbase_homedir}/http-auth-signature-secret":
       owner  => 'hbase',
       group  => 'hbase',
-      mode   => '0640',
+      mode   => '0600',
       source => '/etc/security/http-auth-signature-secret',
     }
-#    file { "${hbase::hbase_homedir}/keystore.server":
-#      owner  => 'hbase',
-#      group  => 'hbase',
-#      mode   => '0640',
-#      source => $hbase::https_keystore,
-#    }
+    file { "${hbase::hbase_homedir}/keystore.server":
+      owner  => 'hbase',
+      group  => 'hbase',
+      mode   => '0600',
+      source => $hbase::https_keystore,
+    }
   }
 }

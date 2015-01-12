@@ -61,6 +61,11 @@
 #   * hbmanager
 #
 # [*https*] undef
+#   Enable https support. It needs to be set when Hadoop cluster has https enabled.
+#
+# * **true**: enable https
+# * **hdfs**: enable https only for Hadoop, keep HBase https disables
+# * **false**: disable https
 #
 class hbase (
   $package_name = $hbase::params::package_name,
@@ -97,13 +102,18 @@ class hbase (
       'hbase.rpc.engine' => 'org.apache.hadoop.hbase.ipc.SecureRpcEngine',
     }
   }
+  if $hbase::https and $hbase::https != 'hdfs' {
+    $https_properties = {
+      'hadoop.ssl.enabled' => true,
+    }
+  }
   $all_descriptions = {
     'hbase.security.authentication' => 'simple, kerberos',
     'hbase.coprocessor.region.classes' =>  'for enabling full security and ACLs',
     'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
   }
 
-  $props = merge($hbase::params::properties, $sec_properties, $properties)
+  $props = merge($hbase::params::properties, $sec_properties, $https_properties, $properties)
   $descs = merge($hbase::params::descriptions, $all_descriptions, $descriptions)
 
   if ($hbase::perform) {

@@ -224,6 +224,11 @@ NAT works OK also with enabled security.
  * hbmanager
 
 [*https*] undef
+  Enable https support. It needs to be set when Hadoop cluster has https enabled.
+
+ * **true**: enable https
+ * **hdfs**: enable https only for Hadoop, keep HBase https disables
+ * **false**: disable https
 
 <a name="limitations"></a>
 ##Limitations
