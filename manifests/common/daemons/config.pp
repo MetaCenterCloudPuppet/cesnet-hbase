@@ -12,6 +12,8 @@ class hbase::common::daemons::config {
 
   if $hbase::features["hbmanager"] {
     file { '/usr/local/sbin/hbmanager':
+      owner   => 'root',
+      group   => 'root',
       mode    => '0755',
       alias   => 'hbmanager',
       content => template('hbase/hbmanager.erb'),
