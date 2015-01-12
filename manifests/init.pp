@@ -56,9 +56,14 @@
 #
 # [*descriptions*]
 #
-# [*features*]
+# [*features*] ()
 #   * restarts
 #   * hbmanager
+#
+# [*acl*] undef
+#
+#   Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
+#   It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
 #
 # [*https*] undef
 #   Enable https support. It needs to be set when Hadoop cluster has https enabled.
@@ -81,6 +86,7 @@ class hbase (
   $properties = undef,
   $descriptions = undef,
   $features = [],
+  $acl = undef,
   $https = undef,
   $alternatives = $params::alternatives,
   $perform = $hbase::params::perform,

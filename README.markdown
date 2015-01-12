@@ -120,6 +120,45 @@ In this example the Hadoop cluster part is missing, see cesnet-hadoop puppet mod
 
 TODO: Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here.
 
+<a name="https"></a>
+###Enable HTTPS
+
+Hadoop and also HBase is able to use SPNEGO protocol (="Kerberos tickets through HTTPS"). This requires proper configuration of the browser on the client side and valid Kerberos ticket.
+
+HTTPS support requires:
+
+* enabled security (*realm* => ...)
+* /etc/security/cacerts file (*https_cacerts* parameter) - kept in the place, only permission changed if needed
+* /etc/security/server.keystore file (*https_keystore* parameter) - copied for each daemon user
+* /etc/security/http-auth-signature-secret file (any data, string or blob) - copied for each daemon user
+* /etc/security/keytab/http.service.keytab - copied for each daemon user
+
+All files should e availavle also from installing of Hadoop cluster, no additional files are needed. See cesnet-hadoop puppet module documentation for details.
+
+The following hbase class parameters are used for HTTPS (see also [Parameters](parameters)):
+
+[*realm*] required
+  Kerberos realm, or empty string to disable security.
+  To enable security, there are required:
+  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
+  * /etc/security/keytab/hbase.service.keytab
+  * enabled security on HDFS
+  * enabled security on zookeeper, if external
+
+[*https*] undef
+  Enable https support. It needs to be set when Hadoop cluster has https enabled.
+
+* **true**: enable https
+* **hdfs**: enable https only for Hadoop, keep HBase https disables
+* **false**: disable https
+
+[*acl*] undef
+
+  Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
+  It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
+
+Enable also *acl* parameter, if is it enabled also for Hadoop cluster in cesnet-hadoop puppet module.
+
 <a name="multihome"></a>
 ###Multihome Support
 
@@ -222,6 +261,11 @@ NAT works OK also with enabled security.
 
  * restarts
  * hbmanager
+
+[*acl*] undef
+
+  Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
+  It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
 
 [*https*] undef
   Enable https support. It needs to be set when Hadoop cluster has https enabled.

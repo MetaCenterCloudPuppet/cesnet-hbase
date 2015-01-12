@@ -37,5 +37,15 @@ class hbase::common::daemons::config {
       mode   => '0600',
       source => $hbase::https_keystore,
     }
+
+    if $hbase::acl {
+      exec { 'setfacl-ssl':
+        command => "setfacl -m u:hbase:r ${hbase::configdir_hadoop}/ssl-server.xml",
+        path    => '/sbin:/usr/sbin:/bin:/usr/bin',
+        creates => "${hbase::hbase_homedir}/keystore.server",
+      }
+
+      Exec['setfacl-ssl'] -> File["${hbase::hbase_homedir}/keystore.server"]
+    }
   }
 }

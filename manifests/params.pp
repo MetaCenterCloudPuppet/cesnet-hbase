@@ -15,6 +15,7 @@ class hbase::params {
         master => 'hbase-master',
         regionserver => 'hbase-regionserver',
       }
+      $configdir_hadoop = '/etc/hadoop/conf'
       $confdir = '/etc/hbase/conf'
       $external_zookeeper = true
       $properties = {
@@ -33,6 +34,7 @@ class hbase::params {
         regionserver => 'hbase-regionserver',
         zookeeper => 'hbase-zookeeper',
       }
+      $configdir_hadoop = '/etc/hadoop'
       $confdir = '/etc/hbase'
       $external_zookeeper = false
       $properties = {
@@ -58,4 +60,6 @@ class hbase::params {
     'RedHat' => undef,
     'Debian' => 'cluster',
   }
+
+  $https_keystore = '/etc/security/server.keystore'
 }
