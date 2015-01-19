@@ -1,12 +1,23 @@
 {
   "name": "cesnet-hbase",
-  "version": "0.1.0",
-  "author": "CESNET",
+  "version": "0.9.0",
+  "author": "František Dvořák <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
-  "license": "Apache 2.0",
+  "license": "MIT",
   "source": "http://scientific.zcu.cz/git/cesnet-hbase.git",
-  "project_page": "scientific.zcu.cz",
+  "project_page": "https://github.com/MetaCenterCloudPuppet",
   "issues_url": "mailto://valtri@civ.zcu.cz",
+  "tags": ["hadoop", "hbase"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "Debian",
+    "operatingsystemrelease": ["7"]
+    },
+    {
+    "operatingsystem": "Fedora",
+    "operatingsystemrelease": ["21"]
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
