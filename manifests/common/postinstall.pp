@@ -5,10 +5,6 @@
 class hbase::common::postinstall {
   $confname = $hbase::alternatives
   $path = '/sbin:/usr/sbin:/bin:/usr/bin'
-  $altcmd = $::osfamily ? {
-    'Debian' => 'update-alternatives',
-    'RedHat' => 'alternatives',
-  }
 
   if $confname {
     exec { 'hbase-copy-config':
@@ -17,18 +13,14 @@ class hbase::common::postinstall {
       creates => "/etc/hbase/conf.${confname}",
     }
     ->
-    exec { 'hbase-install-alternatives':
-      command     => "${altcmd} --install /etc/hbase/conf hbase-conf /etc/hbase/conf.${confname} 50",
-      path        => $path,
-      refreshonly => true,
-      subscribe   => Exec['hbase-copy-config'],
+    alternative_entry{"/etc/hbase/conf.${confname}":
+      altlink  => '/etc/hbase/conf',
+      altname  => 'hbase-conf',
+      priority => 50,
     }
     ->
-    exec { 'hbase-set-alternatives':
-      command     => "${altcmd} --set hbase-conf /etc/hbase/conf.${confname}",
-      path        => $path,
-      refreshonly => true,
-      subscribe   => Exec['hbase-copy-config'],
+    alternatives{'hbase-conf':
+      path => "/etc/hbase/conf.${confname}",
     }
   }
 }

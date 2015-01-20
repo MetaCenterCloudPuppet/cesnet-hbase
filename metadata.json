@@ -22,6 +22,10 @@
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "adrien/alternatives",
+      "version_requirement": ">= 0.3.0"
     }
   ]
 }
