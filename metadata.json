@@ -4,9 +4,9 @@
   "author": "František Dvořák <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
   "license": "MIT",
-  "source": "http://scientific.zcu.cz/git/cesnet-hbase.git",
+  "source": "https://github.com/MetaCenterCloudPuppet/cesnet-hbase",
   "project_page": "https://github.com/MetaCenterCloudPuppet",
-  "issues_url": "mailto://valtri@civ.zcu.cz",
+  "issues_url": "https://github.com/MetaCenterCloudPuppet/cesnet-hbase/issues",
   "tags": ["hadoop", "hbase"],
   "operatingsystem_support": [
     {
