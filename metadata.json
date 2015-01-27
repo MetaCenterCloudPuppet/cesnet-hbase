@@ -36,6 +36,10 @@
     {
       "name": "adrien/alternatives",
       "version_requirement": ">= 0.3.0"
+    },
+    {
+      "name": "cesnet/hadoop",
+      "version_requirement": ">= 0.0.0"
     }
   ]
 }
