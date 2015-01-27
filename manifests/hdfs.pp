@@ -40,53 +40,19 @@ class hbase::hdfs {
   }
   Group['hbase'] -> User['hbase']
 
-  $realm = $hbase::realm
-  $env = [ 'KRB5CCNAME=FILE:/tmp/krb5cc_nn_puppet' ]
-  $path = '/sbin:/usr/sbin:/bin:/usr/bin'
-  $touchfile = '/var/lib/hadoop-hdfs/.puppet-hbase-dir-created'
-
-  # better to destroy the ticket (it may be owned by root),
-  # destroy it only when needed though
-  exec { 'hbase-kdestroy-old':
-    command     => 'kdestroy',
-    path        => $path,
-    environment => $env,
-    onlyif      => "test -n \"${realm}\"",
-    creates     => $touchfile,
-    require    => User['hbase'],
+  $touchfile = 'hbase-dir-created'
+  hadoop::kinit { 'hbase-kinit':
+    touchfile => $touchfile,
   }
   ->
-  exec { 'hbase-kinit':
-    command     => "kinit -k -t /etc/security/keytab/nn.service.keytab nn/${::fqdn}@${realm}",
-    path        => $path,
-    environment => $env,
-    onlyif      => "test -n \"${realm}\"",
-    user        => 'hdfs',
-    creates     => $touchfile,
+  hadoop::mkdir { '/hbase':
+    owner     => 'hbase',
+    group     => 'hbase',
+    touchfile => $touchfile,
   }
   ->
-  exec { 'hbase-dir':
-    command     => 'hdfs dfs -mkdir /hbase',
-    path        => $path,
-    environment => $env,
-    unless      => 'hdfs dfs -test -d /hbase',
-    user        => 'hdfs',
-    creates     => $touchfile,
-  }
-  ->
-  exec { 'hbase-chown':
-    command     => "hdfs dfs -chown hbase:hbase /hbase && touch ${touchfile}",
-    path        => $path,
-    environment => $env,
-    user        => 'hdfs',
-    creates     => $touchfile,
-  }
-  ->
-  exec { 'hbase-kdestroy':
-    command     => 'kdestroy',
-    path        => $path,
-    environment => $env,
-    user        => 'hdfs',
-    creates     => $touchfile,
+  hadoop::kdestroy { 'hbase-kdestroy':
+    touchfile => $touchfile,
+    touch     => true,
   }
 }
