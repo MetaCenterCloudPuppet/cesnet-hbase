@@ -1,0 +1,12 @@
+name 'cesnet-hbase'
+version '0.9.3'
+source 'https://github.com/MetaCenterCloudPuppet/cesnet-hbase'
+author 'Frantisek Dvorak <valtri@civ.zcu.cz>'
+license 'MIT'
+summary 'HBase Cluster'
+description 'HBase Cluster'
+project_page 'https://github.com/MetaCenterCloudPuppet'
+
+dependency 'puppetlabs/stdlib', '>= 1.0.0'
+dependency 'adrien/alternatives', '>= 0.3.0'
+dependency 'cesnet/hadoop', '>= 0.0.0'
