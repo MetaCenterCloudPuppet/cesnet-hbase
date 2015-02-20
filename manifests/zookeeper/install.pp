@@ -5,7 +5,7 @@ class hbase::zookeeper::install {
     contain hbase::common::postinstall
 
     if !$hbase::packages['zookeeper'] {
-      fail("hbase zookepper not supported on this platform, external zookeeper needed")
+      fail('hbase zookepper not supported on this platform, external zookeeper needed')
     }
 
     ensure_packages($hbase::packages['zookeeper'])

@@ -12,8 +12,8 @@ class hbase::hdfs {
     ensure => present,
     system => true,
   }
-  case "${::osfamily}" {
-    'RedHat': {
+  case $::osfamily {
+    default: {
       user { 'hbase':
         ensure     => present,
         system     => true,

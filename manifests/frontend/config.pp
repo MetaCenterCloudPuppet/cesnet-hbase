@@ -6,14 +6,14 @@ class hbase::frontend::config {
   }
 
   file {'/var/lib/hbase/local':
-    ensure  => 'directory',
-    owner   => 'hbase',
-    group   => 'hbase',
+    ensure => 'directory',
+    owner  => 'hbase',
+    group  => 'hbase',
   }
   ->
   file {'/var/lib/hbase/local/jars':
-    ensure  => 'directory',
-    owner   => 'hbase',
-    group   => 'hbase',
+    ensure => 'directory',
+    owner  => 'hbase',
+    group  => 'hbase',
   }
 }
