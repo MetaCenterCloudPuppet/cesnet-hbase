@@ -1,6 +1,6 @@
-# == Class hbase::regionserver
+# == Class hbase::restserver
 #
-# HBase worker node. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
+# HBase REST Server. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
 #
 class hbase::restserver {
   include 'hbase::restserver::install'

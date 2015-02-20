@@ -1,6 +1,6 @@
-# == Class hbase::regionserver
+# == Class hbase::thriftserver
 #
-# HBase worker node. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
+# HBase Thrift Server. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
 #
 class hbase::thriftserver {
   include 'hbase::thriftserver::install'

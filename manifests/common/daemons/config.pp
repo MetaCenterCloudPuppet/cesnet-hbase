@@ -11,6 +11,9 @@ class hbase::common::daemons::config {
   }
 
   if $hbase::features["hbmanager"] {
+    $rest_hostnames = $hbase::rest_hostnames
+    $thrift_hostnames = $hbase::thrift_hostnames
+    $slaves = $hbase::slaves
     file { '/usr/local/sbin/hbmanager':
       owner   => 'root',
       group   => 'root',

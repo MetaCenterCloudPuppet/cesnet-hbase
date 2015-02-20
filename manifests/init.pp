@@ -32,6 +32,14 @@
 # [*master_hostname*] (undef)
 #   HBase master node.
 #
+# [*rest_hostnames] (undef)
+#
+#  Rest Server hostnames (used only for the helper admin script).
+#
+# [*thrift_hostnames] (undef)
+#
+#  Thrift Server hostnames (used only for the helper admin script).
+#
 # [*zookeeper_hostnames*] required
 #   Zookeepers to use. May be ["localhost"] in non-cluster mode.
 #
@@ -78,6 +86,8 @@ class hbase (
 
   $hdfs_hostname,
   $master_hostname = undef,
+  $rest_hostnames = undef,
+  $thrift_hostnames = undef,
   $zookeeper_hostnames,
   $external_zookeeper = $hbase::params::external_zookeeper,
   $slaves = [],
@@ -104,8 +114,12 @@ class hbase (
       'hbase.coprocessor.master.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
       'hbase.coprocessor.region.classes' => 'org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController',
       'hbase.security.exec.permissions.checks' => true,
+      'hbase.rest.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
+      'hbase.rest.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
       'hbase.rpc.protection' => 'auth-conf',
       'hbase.rpc.engine' => 'org.apache.hadoop.hbase.ipc.SecureRpcEngine',
+      'hbase.thrift.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
+      'hbase.thrift.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
     }
   }
   if $hbase::https and $hbase::https != 'hdfs' {

@@ -81,7 +81,7 @@ By default the main *hbase* class do nothing but configuration of the hbase pupp
 
 Let's start with brief examples.
 
-**Example 1**: The simplest setup is one-node HBase cluster without security, with everything on single machine:
+**Example**: The simplest setup is one-node HBase cluster without security, with everything on single machine:
 
     class{'hbase':
       hdfs_hostname => $::fqdn,
@@ -119,6 +119,34 @@ In this example the Hadoop cluster part is missing, see cesnet-hadoop puppet mod
 ##Usage
 
 TODO: Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here.
+
+**Example Rest**: HBase REST Server (modify *$::fqdn* and *default* to proper values):
+
+    class{'hbase':
+      ...
+      # (needed only for helper admin script hbmanager)
+      rest_hostnames => [ $::fqdn ],
+      ...
+    }
+
+    node default {
+      ...
+      include hbase::rest
+    }
+
+**Example Thrift**: HBase Thrift Server (modify *$::fqdn* and *default* to proper values):
+
+    class{'hbase':
+      ...
+      # (needed only for helper admin script hbmanager)
+      thrift_hostnames => [ $::fqdn ],
+      ...
+    }
+
+    node default {
+      ...
+      include hbase::thrift
+    }
 
 <a name="https"></a>
 ###Enable HTTPS
@@ -180,7 +208,7 @@ In this case the HBase will listen on the interface with 10.2.4.12 IP address. I
     # regionservers
     iptables -t nat -A PREROUTING -p tcp -m tcp -d 147.251.9.38 --dport 60020 -j DNAT --to-destination 10.2.4.12:60020
 
-NAT works OK also with enabled security.
+NAT works OK also with security enabled, you may need *noaddresses = yes* in */etc/krb5.conf*.
 
 <a name="reference"></a>
 ##Reference
@@ -211,6 +239,14 @@ NAT works OK also with enabled security.
  * config
  * install
  * service
+* **restserver** - HBase REST Server
+ * config
+ * install
+ * service
+* **thriftserver** - HBase Thrift Server
+ * config
+ * install
+ * service
 * **zookeeper** - HBase internal zookeeper (recommended external zookeeper instead)
  * config
  * install
@@ -226,6 +262,14 @@ NAT works OK also with enabled security.
 [*master_hostname*] (undef)
 
   HBase master node.
+
+[*rest_hostnames] (undef)
+
+  Rest Server hostnames (used only for the helper admin script).
+
+[*thrift_hostnames] (undef)
+
+  Thrift Server hostnames (used only for the helper admin script).
 
 [*zookeeper_hostnames*] required
 
