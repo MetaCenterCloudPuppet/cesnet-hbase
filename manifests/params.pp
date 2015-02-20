@@ -44,7 +44,10 @@ class hbase::params {
       }
       $configdir_hadoop = '/etc/hadoop'
       $confdir = '/etc/hbase'
-      $external_zookeeper = false
+      $external_zookeeper = $::operatingsystem ? {
+        'Fedora' => false,
+        default  => true,
+      }
       $properties = {
         'hbase.tmp.dir' => '/var/lib/hbase/cache',
       }

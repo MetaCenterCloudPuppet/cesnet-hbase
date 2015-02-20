@@ -43,7 +43,7 @@
 # [*zookeeper_hostnames*] required
 #   Zookeepers to use. May be ["localhost"] in non-cluster mode.
 #
-# [*external_zookeeper*] (false)
+# [*external_zookeeper*] (true)
 #   Don't launch HBase Zookeeper.
 #
 # [*slaves*] ([])

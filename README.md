@@ -326,5 +326,6 @@ See [Setup Requirements](#setup-requirements) section.
 <a name="development"></a>
 ##Development
 
-* Repository: [http://scientific.zcu.cz/git/?p=cesnet-hbase.git;a=summary](http://scientific.zcu.cz/git/?p=cesnet-hbase.git;a=summary)
+* Repository: [https://github.com/MetaCenterCloudPuppet/cesnet-hbase.git](https://github.com/MetaCenterCloudPuppet/cesnet-hbase.git)
+* Tests: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
 * Email: František Dvořák &lt;valtri@civ.zcu.cz&gt;
