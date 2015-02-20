@@ -9,11 +9,15 @@ class hbase::params {
       $packages = {
         master => 'hbase-master',
         regionserver => 'hbase-regionserver',
+        thriftserver => 'hbase-thrift',
+        restserver => 'hbase-rest',
         frontend => 'hbase',
       }
       $daemons = {
         master => 'hbase-master',
         regionserver => 'hbase-regionserver',
+        thriftserver => 'hbase-thrift',
+        restserver => 'hbase-rest',
       }
       $configdir_hadoop = '/etc/hadoop/conf'
       $confdir = '/etc/hbase/conf'
@@ -26,12 +30,16 @@ class hbase::params {
       $packages = {
         master => 'hbase',
         regionserver => 'hbase',
+        thriftserver => 'hbase',
+        restserver => 'hbase',
         zookeeper => 'hbase',
         frontend => 'hbase',
       }
       $daemons = {
         master => 'hbase-master',
         regionserver => 'hbase-regionserver',
+        thriftserver => 'hbase-thrift',
+        restserver => 'hbase-rest',
         zookeeper => 'hbase-zookeeper',
       }
       $configdir_hadoop = '/etc/hadoop'

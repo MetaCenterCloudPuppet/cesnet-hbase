@@ -1,6 +1,6 @@
 {
   "name": "cesnet-hbase",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "author": "Frantisek Dvorak <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
   "license": "MIT",
@@ -16,6 +16,10 @@
     {
     "operatingsystem": "Fedora",
     "operatingsystemrelease": ["21"]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": ["14.04"]
     }
   ],
   "requirements": [
