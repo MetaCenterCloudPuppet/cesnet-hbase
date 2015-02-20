@@ -2,7 +2,7 @@
 #
 # HBase worker node. Meant to be included to particular nodes. Declaration of the main hbase class with configuration is required.
 #
-class hbase::regionserver {
+class hbase::thriftserver {
   include 'hbase::thriftserver::install'
   include 'hbase::thriftserver::config'
   include 'hbase::thriftserver::service'
