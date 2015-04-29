@@ -10,7 +10,7 @@ export HBASE_PID_DIR=/var/run/hbase
 <% end -%>
 <% -%>
 <% if scope.lookupvar('hbase::external_zookeeper') == true -%>
-<% if @realm -%>
+<% if @realm and not @realm.empty? -%>
 export HBASE_OPTS="$HBASE_OPTS -Djava.security.auth.login.config=<%= scope.lookupvar('hbase::confdir') -%>/zk-jaas.conf"
 <% end -%>
 export HBASE_MANAGES_ZK=false
