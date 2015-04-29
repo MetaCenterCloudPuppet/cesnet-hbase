@@ -103,7 +103,7 @@ class hbase (
 ) inherits hbase::params {
   include stdlib
 
-  if $hbase::realm {
+  if $hbase::realm and $hbase::realm != '' {
     $sec_properties = {
       'hbase.security.authentication' => 'kerberos',
       'hbase.master.keytab.file' => '/etc/security/keytab/hbase.service.keytab',

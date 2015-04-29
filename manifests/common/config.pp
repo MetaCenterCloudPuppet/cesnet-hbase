@@ -21,7 +21,7 @@ class hbase::common::config {
     content => template('hbase/hbase-env.sh.erb'),
   }
 
-  if $hbase::realm {
+  if $hbase::realm and $hbase::realm != '' {
     file { "${hbase::confdir}/zk-jaas.conf":
       owner   => 'root',
       group   => 'root',
