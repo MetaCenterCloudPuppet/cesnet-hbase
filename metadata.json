@@ -1,6 +1,6 @@
 {
   "name": "cesnet-hbase",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "author": "Frantisek Dvorak <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
   "license": "MIT",
@@ -43,7 +43,7 @@
     },
     {
       "name": "cesnet/hadoop",
-      "version_requirement": ">= 0.9.4 <1.0.0"
+      "version_requirement": ">= 0.9.4 <2.0.0"
     }
   ]
 }
