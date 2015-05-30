@@ -95,7 +95,7 @@ class hbase (
   $realm,
   $properties = undef,
   $descriptions = undef,
-  $features = [],
+  $features = {},
   $acl = undef,
   $https = undef,
   $alternatives = $params::alternatives,
