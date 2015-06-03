@@ -1,5 +1,5 @@
 name 'cesnet-hbase'
-version '0.10.1'
+version '0.10.2'
 source 'https://github.com/MetaCenterCloudPuppet/cesnet-hbase'
 author 'Frantisek Dvorak <valtri@civ.zcu.cz>'
 license 'MIT'
@@ -9,4 +9,4 @@ project_page 'https://github.com/MetaCenterCloudPuppet'
 
 dependency 'puppetlabs/stdlib', '>= 1.0.0 <5.0.0'
 dependency 'adrien/alternatives', '>= 0.3.0 <1.0.0'
-dependency 'cesnet/hadoop', '>= 0.9.4 <2.0.0'
+dependency 'cesnet/hadoop', '>= 0.9.4 <3.0.0'
