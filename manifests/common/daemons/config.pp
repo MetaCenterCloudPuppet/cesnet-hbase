@@ -45,17 +45,16 @@ class hbase::common::daemons::config {
 
     if $hbase::acl {
       exec { 'setfacl-ssl':
-        command => "setfacl -m u:hbase:r ${hbase::configdir_hadoop}/ssl-server.xml",
+        command => "setfacl -m u:hbase:r ${hbase::configdir_hadoop}/ssl-server.xml ${hbase::configdir_hadoop}/ssl-client.xml && touch ${hbase::hbase_homedir}/.puppet-ssl-facl",
         path    => '/sbin:/usr/sbin:/bin:/usr/bin',
-        # ugly hack to perform setacl only once
-        creates => "${hbase::hbase_homedir}/keystore.server",
-        require => File["${hbase::configdir_hadoop}/ssl-server.xml"],
+        creates => "${hbase::hbase_homedir}/.puppet-ssl-facl",
+        require => [
+          File["${hbase::configdir_hadoop}/ssl-client.xml"],
+          File["${hbase::configdir_hadoop}/ssl-server.xml"],
+        ]
       }
 
-      # ugly hack to perform setacl only once
-      Exec['setfacl-ssl'] -> File["${hbase::hbase_homedir}/keystore.server"]
-
-      # ssl-server.xml
+      # ssl-client.xml and ssl-server.xml
       Class['hadoop::common::config'] -> Exec['setfacl-ssl']
     }
   }
