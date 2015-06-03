@@ -10,16 +10,28 @@
   "tags": ["hadoop", "hbase"],
   "operatingsystem_support": [
     {
-    "operatingsystem": "Debian",
-    "operatingsystemrelease": ["7"]
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": ["6"]
     },
     {
-    "operatingsystem": "Fedora",
-    "operatingsystemrelease": ["21"]
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": ["7"]
     },
     {
-    "operatingsystem": "Ubuntu",
-    "operatingsystemrelease": ["14.04"]
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": ["21"]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["6"]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": ["6"]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": ["14.04"]
     }
   ],
   "requirements": [

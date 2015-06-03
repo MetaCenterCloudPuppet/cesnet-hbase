@@ -30,6 +30,7 @@ Supported are:
 
 * Fedora 21: native packages (tested on HBase 0.98.3)
 * Debian 7/wheezy: Cloudera distribution (tested on HBase 0.98.6)
+* RHEL 6, CentOS 6, Scientific Linux 6 (tested on HBase 1.0.0)
 
 <a name="setup"></a>
 ##Setup

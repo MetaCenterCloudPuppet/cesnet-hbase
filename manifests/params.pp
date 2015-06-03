@@ -4,29 +4,8 @@
 # It sets variables according to platform
 #
 class hbase::params {
-  case $::osfamily {
-    'Debian': {
-      $packages = {
-        master => 'hbase-master',
-        regionserver => 'hbase-regionserver',
-        thriftserver => 'hbase-thrift',
-        restserver => 'hbase-rest',
-        frontend => 'hbase',
-      }
-      $daemons = {
-        master => 'hbase-master',
-        regionserver => 'hbase-regionserver',
-        thriftserver => 'hbase-thrift',
-        restserver => 'hbase-rest',
-      }
-      $configdir_hadoop = '/etc/hadoop/conf'
-      $confdir = '/etc/hbase/conf'
-      $external_zookeeper = true
-      $properties = {
-        'hbase.tmp.dir' => '/var/lib/hbase',
-      }
-    }
-    'RedHat': {
+  case "${::osfamily}-${::operatingsystem}" {
+    /RedHat-Fedora/: {
       $packages = {
         master => 'hbase',
         regionserver => 'hbase',
@@ -42,34 +21,64 @@ class hbase::params {
         restserver => 'hbase-rest',
         zookeeper => 'hbase-zookeeper',
       }
-      $configdir_hadoop = '/etc/hadoop'
-      $confdir = '/etc/hbase'
-      $external_zookeeper = $::operatingsystem ? {
-        'Fedora' => false,
-        default  => true,
-      }
       $properties = {
         'hbase.tmp.dir' => '/var/lib/hbase/cache',
       }
     }
-    default: {
-      fail("${::operatingsystem} not supported")
+    /Debian|RedHat/: {
+      $packages = {
+        master => 'hbase-master',
+        regionserver => 'hbase-regionserver',
+        thriftserver => 'hbase-thrift',
+        restserver => 'hbase-rest',
+        frontend => 'hbase',
+      }
+      $daemons = {
+        master => 'hbase-master',
+        regionserver => 'hbase-regionserver',
+        thriftserver => 'hbase-thrift',
+        restserver => 'hbase-rest',
+      }
+      $properties = {
+        'hbase.tmp.dir' => '/var/lib/hbase',
+      }
     }
+    default: {
+      fail("${::operatingsystem} (${::osfamily}) not supported")
+    }
+  }
+
+  $confdir = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '/etc/hbase',
+    /Debian|RedHat/ => '/etc/hbase/conf',
+  }
+
+  $configdir_hadoop = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '/etc/hadoop',
+    /Debian|RedHat/ => '/etc/hadoop/conf',
   }
 
   $descriptions = {
     'hbase.tmp.dir' => 'The temporary directory.',
   }
-  $perform = false
 
-  $hbase_homedir = $::osfamily ? {
-    'RedHat' => '/var/lib/hbase',
-    'Debian' => '/var/lib/hbase',
+  $external_zookeeper = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => false,
+    /Debian|RedHat/ => true,
   }
 
-  $alternatives = $::osfamily ? {
-    'RedHat' => undef,
-    'Debian' => 'cluster',
+  $perform = false
+
+  $hbase_homedir = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '/var/lib/hbase',
+    /Debian|RedHat/ => '/var/lib/hbase',
+  }
+
+  $alternatives = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => undef,
+    # https://github.com/puppet-community/puppet-alternatives/issues/18
+    /RedHat/        => '',
+    /Debian/        => 'cluster',
   }
 
   $https_keystore = '/etc/security/server.keystore'

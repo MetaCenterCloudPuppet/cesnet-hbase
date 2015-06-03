@@ -133,8 +133,8 @@ class hbase (
     'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
   }
 
-  $props = merge($hbase::params::properties, $sec_properties, $https_properties, $properties)
-  $descs = merge($hbase::params::descriptions, $all_descriptions, $descriptions)
+  $_properties = merge($hbase::params::properties, $sec_properties, $https_properties, $properties)
+  $_descriptions = merge($hbase::params::descriptions, $all_descriptions, $descriptions)
 
   if ($hbase::perform) {
     include hbase::install

@@ -1,12 +1,10 @@
-<% if scope.lookupvar('::osfamily') == 'Debian' -%>
-export HBASE_OPTS="-XX:+UseConcMarkSweepGC"
-<% end -%>
-<% -%>
-<% if scope.lookupvar('::osfamily') == 'RedHat' -%>
+<% if scope.lookupvar('::operatingsystem') == 'Fedora' -%>
 export JAVA_HOME=/usr/lib/jvm/jre
 export HBASE_OPTS="-XX:+UseConcMarkSweepGC"
 export HBASE_LOG_DIR=/var/log/hbase
 export HBASE_PID_DIR=/var/run/hbase
+<% else -%>
+export HBASE_OPTS="-XX:+UseConcMarkSweepGC"
 <% end -%>
 <% -%>
 <% if scope.lookupvar('hbase::external_zookeeper') == true -%>
