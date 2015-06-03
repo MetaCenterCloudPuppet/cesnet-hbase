@@ -62,14 +62,24 @@
     </description>
   </property>
 
-<% properties = scope.lookupvar('hbase::props').select { |name,value| value != '::undef' } -%>
-<% properties.keys.each do |p| -%>
-<%if scope.lookupvar('hbase::descs')[p] -%>
-  <!-- <%= scope.lookupvar('hbase::descs')[p] %> -->
+<% properties = scope.lookupvar('hbase::_properties') -%>
+<%# sort the properties list for ruby <= 1.8 #-%>
+<% rv=RUBY_VERSION.split('.') -%>
+<% if rv[0] <= '1' and rv[1] <= '8' -%>
+<% properties_keys = properties.keys.sort -%>
+<% else -%>
+<% properties_keys = properties.keys -%>
+<% end -%>
+<% properties_keys.each do |p| -%>
+<% value = scope.lookupvar('hbase::_properties')[p] -%>
+<% if value != '::undef' -%>
+<% if scope.lookupvar('hbase::_descriptions')[p] -%>
+  <!-- <%= scope.lookupvar('hbase::_descriptions')[p] %> -->
 <% end -%>
   <property>
     <name><%= p -%></name>
-    <value><%= scope.lookupvar('hbase::props')[p] -%></value>
+    <value><%= value -%></value>
   </property>
+<% end -%>
 <% end -%>
 </configuration>
