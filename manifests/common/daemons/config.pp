@@ -44,7 +44,7 @@ class hbase::common::daemons::config {
     }
 
     if $hbase::acl {
-      exec { 'setfacl-ssl':
+      exec { 'setfacl-ssl-hbase':
         command => "setfacl -m u:hbase:r ${hbase::configdir_hadoop}/ssl-server.xml ${hbase::configdir_hadoop}/ssl-client.xml && touch ${hbase::hbase_homedir}/.puppet-ssl-facl",
         path    => '/sbin:/usr/sbin:/bin:/usr/bin',
         creates => "${hbase::hbase_homedir}/.puppet-ssl-facl",
@@ -55,7 +55,7 @@ class hbase::common::daemons::config {
       }
 
       # ssl-client.xml and ssl-server.xml
-      Class['hadoop::common::config'] -> Exec['setfacl-ssl']
+      Class['hadoop::common::config'] -> Exec['setfacl-ssl-hbase']
     }
   }
 }
