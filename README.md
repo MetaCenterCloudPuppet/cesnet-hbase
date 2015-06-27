@@ -8,6 +8,7 @@
     * [Beginning with hbase](#beginning-with-hbase)
 4. [Usage - Configuration options and additional functionality](#usage)
     * [Multihome Support](#multihome)
+    * [Upgrade](#upgrade)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
     * [Parameters](#parameters)
@@ -210,6 +211,25 @@ In this case the HBase will listen on the interface with 10.2.4.12 IP address. I
     iptables -t nat -A PREROUTING -p tcp -m tcp -d 147.251.9.38 --dport 60020 -j DNAT --to-destination 10.2.4.12:60020
 
 NAT works OK also with security enabled, you may need *noaddresses = yes* in */etc/krb5.conf*.
+
+<a name="upgrade"></a>
+###Upgrade
+
+The best way is to refresh configrations from the new original (=remove the old) and relaunch puppet on top of it. You may need to remove helper file *~hbase/.puppet-ssl\**, when upgrading from older versions of cesnet-hbase module.
+
+For example:
+
+    alternative='cluster'
+    d='hbase'
+    mv /etc/{d}$/conf.${alternative} /etc/${d}/conf.cdhXXX
+    update-alternatives --auto ${d}-conf
+    rm -fv ~hbase/.puppet-ssl*
+
+    # upgrade
+    ...
+
+    puppet agent --test
+    #or: puppet apply ...
 
 <a name="reference"></a>
 ##Reference
