@@ -1,3 +1,7 @@
+##HBase
+
+[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase)
+
 ####Table of Contents
 
 1. [Overview](#overview)
