@@ -11,6 +11,8 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with hbase](#beginning-with-hbase)
 4. [Usage - Configuration options and additional functionality](#usage)
+    * [HBase REST and Thrift API](#apis)
+    * [Enable HTTPS](#https)
     * [Multihome Support](#multihome)
     * [Upgrade](#upgrade)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -124,7 +126,16 @@ In this example the Hadoop cluster part is missing, see cesnet-hadoop puppet mod
 <a name="usage"></a>
 ##Usage
 
-TODO: Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here.
+<a name="apis"></a>
+### HBase REST and Thrift API
+
+REST and Thrift daemons have issues when using in secured environment:
+
+ * HBase REST doesn't support HTTPS
+ * HBase Thrift supports SSL, but there is problematic support in thrift clients
+ * HBase Thrift has security problems (each access translated to *hbase* identity)
+
+When using HBase REST with Kerberos (SPNEGO), the credentials should not leak out. But still, Man-In-Middle can steal session until next renegotiation (default 1 hour).
 
 **Example Rest**: HBase REST Server (modify *$::fqdn* and *default* to proper values):
 
@@ -162,36 +173,25 @@ Hadoop and also HBase is able to use SPNEGO protocol (="Kerberos tickets through
 HTTPS support requires:
 
 * enabled security (*realm* => ...)
+  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
+  * /etc/security/keytab/hbase.service.keytab
+  * enabled security on HDFS
+  * enabled security on zookeeper, if external
 * /etc/security/cacerts file (*https_cacerts* parameter) - kept in the place, only permission changed if needed
 * /etc/security/server.keystore file (*https_keystore* parameter) - copied for each daemon user
 * /etc/security/http-auth-signature-secret file (any data, string or blob) - copied for each daemon user
 * /etc/security/keytab/http.service.keytab - copied for each daemon user
 
-All files should e availavle also from installing of Hadoop cluster, no additional files are needed. See cesnet-hadoop puppet module documentation for details.
+All files should be available already from installing of Hadoop cluster, no additional files are needed. See cesnet-hadoop puppet module documentation for details.
 
-The following hbase class parameters are used for HTTPS (see also [Parameters](parameters)):
+The following hbase class parameters are used for HTTPS (see also [Parameters](#parameters)):
 
-[*realm*] required
-  Kerberos realm, or empty string to disable security.
-  To enable security, there are required:
-  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
-  * /etc/security/keytab/hbase.service.keytab
-  * enabled security on HDFS
-  * enabled security on zookeeper, if external
-
-[*https*] undef
-  Enable https support. It needs to be set when Hadoop cluster has https enabled.
-
-* **true**: enable https
-* **hdfs**: enable https only for Hadoop, keep HBase https disables
-* **false**: disable https
-
-[*acl*] undef
-
-  Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
-  It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
-
-Enable also *acl* parameter, if is it enabled also for Hadoop cluster in cesnet-hadoop puppet module.
+ * *realm* (required for HTTPS) Enable security and Kerberos realm to use.
+ * *https* (undef) Enable support for https.
+ * *https_keystore* (/etc/security/server.keystore) Certificates keystore file.
+ * *https_keystore_password* (changeit) Certificates keystore file password.
+ * *https_keystore_keypassword* (undef) Certificates keystore key password.
+ * *acl* (undef) If setfacl command is available. *acl* parameter needs to be enabled, if is it enabled also for Hadoop cluster in cesnet-hadoop puppet module.
 
 <a name="multihome"></a>
 ###Multihome Support
@@ -280,68 +280,79 @@ For example:
 <a name="parameters"></a>
 ###Parameters
 
-[*hdfs_hostname*] required
-
+####`hdfs_hostname` (required)
   Main node of Hadoop (HDFS Name Node). Used for launching 'hdfs dfs' commands there.
 
-[*master_hostname*] (undef)
-
+####`master_hostname` undef
   HBase master node.
 
-[*rest_hostnames] (undef)
+####`rest_hostnames` undef
 
-  Rest Server hostnames (used only for the helper admin script).
+ Rest Server hostnames (used only for the helper admin script).
 
-[*thrift_hostnames] (undef)
+####`thrift_hostnames` undef
 
-  Thrift Server hostnames (used only for the helper admin script).
+ Thrift Server hostnames (used only for the helper admin script).
 
-[*zookeeper_hostnames*] required
-
+####`zookeeper_hostnames` (required)
   Zookeepers to use. May be ["localhost"] in non-cluster mode.
 
-[*external_zookeeper*] (false)
-
+####`external_zookeeper` true
   Don't launch HBase Zookeeper.
 
-[*slaves*] ([])
-
+####`slaves` []
   HBase regionserver nodes.
 
-[*frontends*] ([])
-
+####`frontends` []
   Array of frontend hostnames. Package and configuration is needed on frontends.
 
-[*realm*] required
-
+####`realm` (required)
   Kerberos realm, or empty string to disable security.
   To enable security, there are required:
 
- * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
- * /etc/security/keytab/hbase.service.keytab
- * enabled security on HDFS
- * enabled security on zookeeper, if external
+  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
+  * /etc/security/keytab/hbase.service.keytab
+  * enabled security on HDFS
+  * enabled security on zookeeper, if external
 
-[*properties*]
+####`properties`
 
-[*descriptions*]
+####`descriptions`
 
-[*features*]
+####`features` ()
+  * restarts
+  * hbmanager
 
- * restarts
- * hbmanager
-
-[*acl*] undef
+####`acl` undef
 
   Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
   It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
 
-[*https*] undef
+####`alternatives` 'cluster'
+
+####`group` 'users'
+
+User groups (used for REST server and Thrift server impersonation).
+
+####`https` undef
   Enable https support. It needs to be set when Hadoop cluster has https enabled.
 
- * **true**: enable https
- * **hdfs**: enable https only for Hadoop, keep HBase https disables
- * **false**: disable https
+* **true**: enable https
+* **hdfs**: enable https only for Hadoop, keep HBase https disabled
+* **false**: disable https
+
+####`https_keystore` '/etc/security/server.keystore'
+
+Certificates keystore file (for thrift server).
+
+####`https_keystore_password` 'changeit'
+
+Certificates keystore file password (for thrift server).
+
+####`https_keystore_keypassword` undef
+
+Certificates keystore key password (for thrift server). If not specified, *https\_keystore\_password* is used.
+
 
 <a name="limitations"></a>
 ##Limitations

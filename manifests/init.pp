@@ -26,59 +26,78 @@
 #
 # === Parameters
 #
-# [*hdfs_hostname*] required
+# ####`hdfs_hostname` (required)
 #   Main node of Hadoop (HDFS Name Node). Used for launching 'hdfs dfs' commands there.
 #
-# [*master_hostname*] (undef)
+# ####`master_hostname` undef
 #   HBase master node.
 #
-# [*rest_hostnames] (undef)
+# ####`rest_hostnames` undef
 #
 #  Rest Server hostnames (used only for the helper admin script).
 #
-# [*thrift_hostnames] (undef)
+# ####`thrift_hostnames` undef
 #
 #  Thrift Server hostnames (used only for the helper admin script).
 #
-# [*zookeeper_hostnames*] required
+# ####`zookeeper_hostnames` (required)
 #   Zookeepers to use. May be ["localhost"] in non-cluster mode.
 #
-# [*external_zookeeper*] (true)
+# ####`external_zookeeper` true
 #   Don't launch HBase Zookeeper.
 #
-# [*slaves*] ([])
+# ####`slaves` []
 #   HBase regionserver nodes.
 #
-# [*frontends*] ([])
+# ####`frontends` []
 #   Array of frontend hostnames. Package and configuration is needed on frontends.
 #
-# [*realm*] required
+# ####`realm` (required)
 #   Kerberos realm, or empty string to disable security.
 #   To enable security, there are required:
+#
 #   * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
 #   * /etc/security/keytab/hbase.service.keytab
 #   * enabled security on HDFS
 #   * enabled security on zookeeper, if external
 #
-# [*properties*]
+# ####`properties`
 #
-# [*descriptions*]
+# ####`descriptions`
 #
-# [*features*] ()
+# ####`features` ()
 #   * restarts
 #   * hbmanager
 #
-# [*acl*] undef
+# ####`acl` undef
 #
 #   Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
 #   It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
 #
-# [*https*] undef
+# ####`alternatives` 'cluster'
+#
+# ####`group` 'users'
+#
+# User groups (used for REST server and Thrift server impersonation).
+#
+# ####`https` undef
 #   Enable https support. It needs to be set when Hadoop cluster has https enabled.
 #
 # * **true**: enable https
-# * **hdfs**: enable https only for Hadoop, keep HBase https disables
+# * **hdfs**: enable https only for Hadoop, keep HBase https disabled
 # * **false**: disable https
+#
+# ####`https_keystore` '/etc/security/server.keystore'
+#
+# Certificates keystore file (for thrift server).
+#
+# ####`https_keystore_password` 'changeit'
+#
+# Certificates keystore file password (for thrift server).
+#
+# ####`https_keystore_keypassword` undef
+#
+# Certificates keystore key password (for thrift server). If not specified, *https\_keystore\_password* is used.
 #
 class hbase (
   $package_name = $hbase::params::package_name,
@@ -97,14 +116,21 @@ class hbase (
   $descriptions = undef,
   $features = {},
   $acl = undef,
-  $https = undef,
   $alternatives = $params::alternatives,
+  $group = 'users',
+  $https = undef,
+  $https_keystore = '/etc/security/server.keystore',
+  $https_keystore_password = 'changeit',
+  $https_keystore_keypassword = undef,
   $perform = $hbase::params::perform,
 ) inherits hbase::params {
   include stdlib
 
   if $hbase::realm and $hbase::realm != '' {
     $sec_properties = {
+      'hadoop.security.authorization' => true,
+      'hadoop.proxyuser.hbase.groups' => $hbase::group,
+      'hadoop.proxyuser.hbase.hosts'  => '*',
       'hbase.security.authentication' => 'kerberos',
       'hbase.master.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.master.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
@@ -114,6 +140,9 @@ class hbase (
       'hbase.coprocessor.master.classes' => 'org.apache.hadoop.hbase.security.access.AccessController',
       'hbase.coprocessor.region.classes' => 'org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController',
       'hbase.security.exec.permissions.checks' => true,
+      'hbase.rest.authentication.type' => 'kerberos',
+      'hbase.rest.authentication.kerberos.principal' => "HTTP/_HOST@${hbase::realm}",
+      'hbase.rest.authentication.kerberos.keytab' => "${hbase::hbase_homedir}/hadoop.keytab",
       'hbase.rest.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.rest.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
       'hbase.rpc.protection' => 'auth-conf',
@@ -123,8 +152,17 @@ class hbase (
     }
   }
   if $hbase::https and $hbase::https != 'hdfs' {
+    if $https_keystore_keypassword {
+      $keypass = $https_keystore_keypassword
+    } else {
+      $keypass = $https_keystore_password
+    }
     $https_properties = {
       'hadoop.ssl.enabled' => true,
+      'hbase.thrift.ssl.enabled' => true,
+      'hbase.thrift.ssl.keystore.store' => $https_keystore,
+      'hbase.thrift.ssl.keystore.password' => $https_keystore_password,
+      'hbase.thrift.ssl.keystore.keypassword' => $keypass,
     }
   }
   $all_descriptions = {
