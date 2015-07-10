@@ -1,5 +1,5 @@
 name 'cesnet-hbase'
-version '0.10.2'
+version '0.10.3'
 source 'https://github.com/MetaCenterCloudPuppet/cesnet-hbase'
 author 'Frantisek Dvorak <valtri@civ.zcu.cz>'
 license 'MIT'

@@ -1,6 +1,6 @@
 {
   "name": "cesnet-hbase",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "author": "Frantisek Dvorak <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
   "license": "MIT",
