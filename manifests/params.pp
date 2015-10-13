@@ -74,12 +74,5 @@ class hbase::params {
     /Debian|RedHat/ => '/var/lib/hbase',
   }
 
-  $alternatives = "${::osfamily}-${::operatingsystem}" ? {
-    /RedHat-Fedora/ => undef,
-    # https://github.com/puppet-community/puppet-alternatives/issues/18
-    /RedHat/        => '',
-    /Debian/        => 'cluster',
-  }
-
   $https_keystore = '/etc/security/server.keystore'
 }

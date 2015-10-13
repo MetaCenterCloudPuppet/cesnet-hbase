@@ -41,7 +41,7 @@ class hbase (
   $descriptions = undef,
   $features = {},
   $acl = undef,
-  $alternatives = $params::alternatives,
+  $alternatives = '::default',
   $group = 'users',
   $https = undef,
   $https_keystore = '/etc/security/server.keystore',
