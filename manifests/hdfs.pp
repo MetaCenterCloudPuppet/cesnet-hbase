@@ -7,38 +7,7 @@
 # This class is needed to be launched on HDFS namenode. With some limitations it can be launched on any Hadoop node (user hbase created or hbase installed on namenode, kerberos ticket available on the local node).
 #
 class hbase::hdfs {
-  # create user/group if needed (we don't need to install hbase just for user, unless it is colocated with the master)
-  group { 'hbase':
-    ensure => present,
-    system => true,
-  }
-  case $::osfamily {
-    default: {
-      user { 'hbase':
-        ensure     => present,
-        system     => true,
-        comment    => 'Apache HBase',
-        gid        => 'hbase',
-        home       => '/var/lib/hbase',
-        managehome => true,
-        password   => '!!',
-        shell      => '/sbin/nologin',
-      }
-    }
-    'Debian': {
-      user { 'hbase':
-        ensure     => present,
-        system     => true,
-        comment    => 'HBase User',
-        gid        => 'hbase',
-        home       => '/var/lib/hbase',
-        managehome => true,
-        password   => '!!',
-        shell      => '/bin/bash',
-      }
-    }
-  }
-  Group['hbase'] -> User['hbase']
+  include ::hbase::user
 
   $touchfile = 'hbase-dir-created'
   hadoop::kinit { 'hbase-kinit':

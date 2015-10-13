@@ -14,6 +14,7 @@
     * [HBase REST and Thrift API](#apis)
     * [Enable HTTPS](#https)
     * [Multihome Support](#multihome)
+    * [Cluster with more HDFS Name nodes](#multinn)
     * [Upgrade](#upgrade)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
@@ -216,6 +217,23 @@ In this case the HBase will listen on the interface with 10.2.4.12 IP address. I
 
 NAT works OK also with security enabled, you may need *noaddresses = yes* in */etc/krb5.conf*.
 
+<a name="multinn"></a>
+###Cluster with more HDFS Name nodes
+
+If there are used more HDFS namenodes in the Hadoop cluster (high availability, namespaces, ...), it is needed to have 'hbase' system user on all of them to authorization work properly. You could install full HBase client (using *hbase::frontend::install*), but just creating the user is enough (using *hbase::user*).
+
+Note, the *hbase::hdfs* class must be used too, but only on one of the HDFS namenodes. It includes the *hbase::user*.
+
+**Example**:
+
+    node <HDFS_NAMENODE> {
+      include hbase::hdfs
+    }
+
+    node <HDFS_OTHER_NAMENODE> {
+      include hbase::user
+    }
+
 <a name="upgrade"></a>
 ###Upgrade
 
@@ -272,6 +290,7 @@ For example:
  * config
  * install
  * service
+* **user** - Create HBase system user, if needed
 * **zookeeper** - HBase internal zookeeper (recommended external zookeeper instead)
  * config
  * install
