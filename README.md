@@ -4,28 +4,22 @@
 
 ####Table of Contents
 
-1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with HBase](#setup)
+1. [Module Description - What the module does and why it is useful](#module-description)
+2. [Setup - The basics of getting started with HBase](#setup)
     * [What cesnet-hbase module affects](#what-hbase-affects)
     * [Setup requirements](#setup-requirements)
     * [Beginning with hbase](#beginning-with-hbase)
-4. [Usage - Configuration options and additional functionality](#usage)
+3. [Usage - Configuration options and additional functionality](#usage)
     * [HBase REST and Thrift API](#apis)
     * [Enable HTTPS](#https)
     * [Multihome Support](#multihome)
     * [Cluster with more HDFS Name nodes](#multinn)
     * [Upgrade](#upgrade)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
-    * [Parameters](#parameters)
+    * [Parameters (hbase class)](#parameters)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
-
-<a name="overview"></a>
-##Overview
-
-Management of HBase Cluster with security based on Kerberos. Puppet 3.x is required. Supported and tested are Fedora (native Hadoop) and Debian (Cloudera distribution).
 
 <a name="module-description"></a>
 ##Module Description
@@ -36,9 +30,11 @@ This module installs and setups HBase Cluster, with all services collocated or s
 
 Supported are:
 
-* Fedora 21: native packages (tested on HBase 0.98.3)
-* Debian 7/wheezy: Cloudera distribution (tested on HBase 0.98.6)
-* RHEL 6, CentOS 6, Scientific Linux 6 (tested on HBase 1.0.0)
+* **Fedora 21**: native packages (tested on HBase 0.98.3)
+* **Debian 7/wheezy**: Cloudera distribution (tested on HBase 0.98.6)
+* **RHEL 6 and clones**: Cloudera distribution (tested on HBase 1.0.0)
+
+Puppet 3.x is required.
 
 <a name="setup"></a>
 ##Setup
@@ -57,7 +53,7 @@ Supported are:
 * Services:
  * master (main server)
  * regionserver (slaves)
- * internal zookeeper (quorum) - not in all distributions, better to use external zookeper
+ * internal zookeeper (quorum) - not in all distributions, better to use external zookeeper
 * Helper Files:
  * /var/lib/hadoop-hdfs/.puppet-hbase-dir-created
 * Secret Files (keytabs): some files are copied to home directory of service user: ~hbase
@@ -79,7 +75,7 @@ Be aware of:
 
    Note: the files are copied into ~hbase.
 
-* **inter-node dependencies**: Hadoop cluster (the HDFS part) needs to be deployed and running before lauching HBase. You should add dependencies on *hadoop::namenode::service* and *hadoop::datanode::service*, if possible (for collocated services) or choose other way (let's fail first puppet launch, use PuppetDB, ...).
+* **inter-node dependencies**: Hadoop cluster (the HDFS part) needs to be deployed and running before launching HBase. You should add dependencies on *hadoop::namenode::service* and *hadoop::datanode::service*, if possible (for collocated services) or choose other way (let's fail first puppet launch, use PuppetDB, ...).
 
 * **zookeeper**: Some versions of HBase provides internal zookeeper, but external zookeeper is recommended. You can use cesnet-zookeeper puppet module.
 
@@ -237,7 +233,7 @@ Note, the *hbase::hdfs* class must be used too, but only on one of the HDFS name
 <a name="upgrade"></a>
 ###Upgrade
 
-The best way is to refresh configrations from the new original (=remove the old) and relaunch puppet on top of it. You may need to remove helper file *~hbase/.puppet-ssl\**, when upgrading from older versions of cesnet-hbase module.
+The best way is to refresh configurations from the new original (=remove the old) and relaunch puppet on top of it. You may need to remove helper file *~hbase/.puppet-ssl\**, when upgrading from older versions of cesnet-hbase module.
 
 For example:
 
@@ -259,119 +255,152 @@ For example:
 <a name="classes"></a>
 ###Classes
 
-* config
-* install
-* init
-* params
-* service
-* common:
- * daemons:
-  * config
- * config
- * keytab
- * postinstall
-* **frontend** - HBase client
- * config
- * install
-* **hdfs** - HBase initialization on HDFS
-* **master** - HBase master
- * config
- * install
- * service
-* **regionserver** - HBase worker node
- * config
- * install
- * service
-* **restserver** - HBase REST Server
- * config
- * install
- * service
-* **thriftserver** - HBase Thrift Server
- * config
- * install
- * service
-* **user** - Create HBase system user, if needed
-* **zookeeper** - HBase internal zookeeper (recommended external zookeeper instead)
- * config
- * install
- * service
+* [**`hbase`**](#class-hbase): HBase Cluster setup
+* `hbase::config`
+* `hbase::install`
+* `hbase::params`
+* `hbase::service`
+* `hbase::common::daemons::config`
+* `hbase::common::config`
+* `hbase::common::keytab`
+* `hbase::common::postinstall`
+* **`hbase::frontend`**: HBase client
+* `hbase::frontend::config`
+* `hbase::frontend::install`
+* **`hbase::hdfs`**: HBase initialization on HDFS
+* **`hbase::master`**: HBase master
+* `hbase::master::config`
+* `hbase::master::install`
+* `hbase::master::service`
+* **`hbase::regionserver`**: HBase worker node
+* `hbase::regionserver::config`
+* `hbase::regionserver::install`
+* `hbase::regionserver::service`
+* **`hbase::restserver`**: HBase REST Server
+* `hbase::restserver::config`
+* `hbase::restserver::install`
+* `hbase::restserver::service`
+* **`hbase::thriftserver`**: HBase Thrift Server
+* `hbase::thriftserver::config`
+* `hbase::thriftserver::install`
+* `hbase::thriftserver::service`
+* **`hbase::user`**: Create HBase system user, if needed
+* **`hbase::zookeeper`**: HBase internal zookeeper (recommended external zookeeper instead)
+* `hbase::zookeeper::config`
+* `hbase::zookeeper::install`
+* `hbase::zookeeper::service`
 
+<a name="class-hbase"></a>
 <a name="parameters"></a>
-###Parameters
+###`hbase` class parameters
 
-####`hdfs_hostname` (required)
-  Main node of Hadoop (HDFS Name Node). Used for launching 'hdfs dfs' commands there.
+####`hdfs_hostname`
 
-####`master_hostname` undef
-  HBase master node.
+Main node of Hadoop (HDFS Name Node) (required).
 
-####`rest_hostnames` undef
+Used to launch 'hdfs dfs' commands there.
 
- Rest Server hostnames (used only for the helper admin script).
+####`master_hostname`
 
-####`thrift_hostnames` undef
+HBase master node. Default: undef.
 
- Thrift Server hostnames (used only for the helper admin script).
+####`rest_hostnames`
 
-####`zookeeper_hostnames` (required)
-  Zookeepers to use. May be ["localhost"] in non-cluster mode.
+Rest Server hostnames (used only for the helper admin script). Default: undef.
 
-####`external_zookeeper` true
-  Don't launch HBase Zookeeper.
+####`thrift_hostnames`
 
-####`slaves` []
-  HBase regionserver nodes.
+Thrift Server hostnames (used only for the helper admin script). Default: undef.
 
-####`frontends` []
-  Array of frontend hostnames. Package and configuration is needed on frontends.
+####`zookeeper_hostnames`
 
-####`realm` (required)
-  Kerberos realm, or empty string to disable security.
-  To enable security, there are required:
+Zookeepers to use (required).
 
-  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
-  * /etc/security/keytab/hbase.service.keytab
-  * enabled security on HDFS
-  * enabled security on zookeeper, if external
+May be ["localhost"] in non-cluster mode.
 
-####`properties`
+####`external_zookeeper`
+
+Don't launch HBase Zookeeper. Default: true.
+
+####`slaves`
+
+HBase regionserver nodes. Default: [].
+
+####`frontends`
+
+Array of frontend hostnames. Default: [].
+
+####`realm`
+
+Kerberos realm, or empty string to disable security. Default: ''.
+
+To enable security, there are required:
+
+* configured Kerberos (*/etc/krb5.conf*, */etc/krb5.keytab*)
+* */etc/security/keytab/hbase.service.keytab*
+* enabled security on HDFS
+* enabled security on zookeeper, if external
 
 ####`descriptions`
 
-####`features` ()
-  * restarts
-  * hbmanager
+Descriptions for the properties. Default: see params.pp.
 
-####`acl` undef
+Just for cuteness.
 
-  Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
-  It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
+####`features`
 
-####`alternatives` 'cluster'
+Default: ().
 
-####`group` 'users'
+List of features:
 
-User groups (used for REST server and Thrift server impersonation).
+* restarts
+* hbmanager
 
-####`https` undef
-  Enable https support. It needs to be set when Hadoop cluster has https enabled.
+####`acl`
+
+Set to true, if setfacl command is available and */etc/hadoop* is on filesystem supporting POSIX ACL. Default: undef.
+
+It is used to set privileges of *ssl-server.xml* for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
+
+####`alternatives`
+
+Switches the alternatives used for the configuration. Default: 'cluster' (Debian) or undef.
+
+It can be used only when supported (for example with Cloudera distribution).
+
+####`group`
+
+User groups. Default: 'users'.
+
+Used for REST server and Thrift server impersonation.
+
+####`https`
+
+Enable https support. Default: undef.
+
+It needs to be set when Hadoop cluster has https enabled.
 
 * **true**: enable https
 * **hdfs**: enable https only for Hadoop, keep HBase https disabled
 * **false**: disable https
 
-####`https_keystore` '/etc/security/server.keystore'
+####`https_keystore`
 
-Certificates keystore file (for thrift server).
+Certificates keystore file (for thrift server). Default: '/etc/security/server.keystore'.
 
-####`https_keystore_password` 'changeit'
+####`https_keystore_password`
 
-Certificates keystore file password (for thrift server).
+Certificates keystore file password (for thrift server). Default: 'changeit'.
 
-####`https_keystore_keypassword` undef
+####`https_keystore_keypassword`
 
-Certificates keystore key password (for thrift server). If not specified, *https\_keystore\_password* is used.
+Certificates keystore key password (for thrift server). Default: undef.
 
+If not specified, *https\_keystore\_password* is used.
+
+####`properties`
+
+Default: undef.
 
 <a name="limitations"></a>
 ##Limitations
@@ -382,5 +411,7 @@ See [Setup Requirements](#setup-requirements) section.
 ##Development
 
 * Repository: [https://github.com/MetaCenterCloudPuppet/cesnet-hbase.git](https://github.com/MetaCenterCloudPuppet/cesnet-hbase.git)
-* Tests: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
+* Tests:
+ * basic: see *.travis.yml*
+ * vagrant: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
 * Email: František Dvořák &lt;valtri@civ.zcu.cz&gt;

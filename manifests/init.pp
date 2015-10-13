@@ -24,81 +24,6 @@
 # * frontends
 # * (hdfs_hostname: only 'kinit' and 'hdfs dfs' commands)
 #
-# === Parameters
-#
-# ####`hdfs_hostname` (required)
-#   Main node of Hadoop (HDFS Name Node). Used for launching 'hdfs dfs' commands there.
-#
-# ####`master_hostname` undef
-#   HBase master node.
-#
-# ####`rest_hostnames` undef
-#
-#  Rest Server hostnames (used only for the helper admin script).
-#
-# ####`thrift_hostnames` undef
-#
-#  Thrift Server hostnames (used only for the helper admin script).
-#
-# ####`zookeeper_hostnames` (required)
-#   Zookeepers to use. May be ["localhost"] in non-cluster mode.
-#
-# ####`external_zookeeper` true
-#   Don't launch HBase Zookeeper.
-#
-# ####`slaves` []
-#   HBase regionserver nodes.
-#
-# ####`frontends` []
-#   Array of frontend hostnames. Package and configuration is needed on frontends.
-#
-# ####`realm` (required)
-#   Kerberos realm, or empty string to disable security.
-#   To enable security, there are required:
-#
-#   * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
-#   * /etc/security/keytab/hbase.service.keytab
-#   * enabled security on HDFS
-#   * enabled security on zookeeper, if external
-#
-# ####`properties`
-#
-# ####`descriptions`
-#
-# ####`features` ()
-#   * restarts
-#   * hbmanager
-#
-# ####`acl` undef
-#
-#   Set to true, if setfacl command is available and /etc/hadoop is on filesystem supporting POSIX ACL.
-#   It is used to set privileges of ssl-server.xml for HBase. If the POSIX ACL is not supported, disable this parameter also in cesnet-hadoop puppet module.
-#
-# ####`alternatives` 'cluster'
-#
-# ####`group` 'users'
-#
-# User groups (used for REST server and Thrift server impersonation).
-#
-# ####`https` undef
-#   Enable https support. It needs to be set when Hadoop cluster has https enabled.
-#
-# * **true**: enable https
-# * **hdfs**: enable https only for Hadoop, keep HBase https disabled
-# * **false**: disable https
-#
-# ####`https_keystore` '/etc/security/server.keystore'
-#
-# Certificates keystore file (for thrift server).
-#
-# ####`https_keystore_password` 'changeit'
-#
-# Certificates keystore file password (for thrift server).
-#
-# ####`https_keystore_keypassword` undef
-#
-# Certificates keystore key password (for thrift server). If not specified, *https\_keystore\_password* is used.
-#
 class hbase (
   $package_name = $hbase::params::package_name,
   $service_name = $hbase::params::service_name,
@@ -111,7 +36,7 @@ class hbase (
   $external_zookeeper = $hbase::params::external_zookeeper,
   $slaves = [],
   $frontends = [],
-  $realm,
+  $realm = '',
   $properties = undef,
   $descriptions = undef,
   $features = {},
