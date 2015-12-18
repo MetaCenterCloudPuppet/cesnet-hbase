@@ -59,7 +59,12 @@ class hbase::params {
   }
 
   $descriptions = {
-    'hbase.tmp.dir' => 'The temporary directory.',
+    'hbase.coprocessor.region.classes' =>  'for enabling full security and ACLs',
+    'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
+    'hbase.security.authentication' => 'simple, kerberos',
+    'hbase.tmp.dir' => 'temporary directory',
+    'hbase.zookeeper.property.clientPort' => 'internal ZooKeeper: the port at which the clients will connect',
+    'hbase.zookeeper.property.dataDir' => 'internal ZooKeeer: the directory where the snapshot is stored',
   }
 
   $external_zookeeper = "${::osfamily}-${::operatingsystem}" ? {

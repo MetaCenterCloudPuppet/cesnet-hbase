@@ -90,14 +90,17 @@ class hbase (
       'hbase.thrift.ssl.keystore.keypassword' => $keypass,
     }
   }
-  $all_descriptions = {
-    'hbase.security.authentication' => 'simple, kerberos',
-    'hbase.coprocessor.region.classes' =>  'for enabling full security and ACLs',
-    'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',
+  if $hbase::external_zookeeper {
+    $zoo_properties = {}
+  } else {
+    $zoo_properties = {
+      'hbase.zookeeper.property.clientPort' => 2181,
+      'hbase.zookeeper.property.dataDir' => '/var/lib/hbase/zookeeper',
+    }
   }
 
-  $_properties = merge($hbase::params::properties, $sec_properties, $https_properties, $properties)
-  $_descriptions = merge($hbase::params::descriptions, $all_descriptions, $descriptions)
+  $_properties = merge($hbase::params::properties, $sec_properties, $https_properties, $zoo_properties, $properties)
+  $_descriptions = merge($hbase::params::descriptions, $descriptions)
 
   if ($hbase::perform) {
     include hbase::install
