@@ -2,28 +2,6 @@
 #
 # HBase Cluster setup.
 #
-# Installation notes:
-#
-# 1) Hadoop cluser needs to be already completely deployed (HDFS namenode and datanodes)
-#
-# 2) hbase class needs to be launch also on HDFS namenode,
-#    if not:
-#  - create hbase user on Hadoop HDFS Name Node (or install HBase)
-#  - create /hbase HDFS directory:
-#      hdfs dfs -mkdir /hbase
-#      hdfs dfs -chown hbase:hbase /hbase
-#
-# 3) if enabled https in Hadoop, hbase needs access to http secret file and Kerberos keyfile ==> enable https also in hbase
-#
-# Web UI: ports 60010, 60030, https is not supported
-#
-# Any changes will be done only on these hostnames:
-# * master_hostname
-# * zookeeper_hostnames (if external_zookeeper is false)
-# * slaves
-# * frontends
-# * (hdfs_hostname: only 'kinit' and 'hdfs dfs' commands)
-#
 class hbase (
   $package_name = $hbase::params::package_name,
   $service_name = $hbase::params::service_name,
