@@ -31,7 +31,7 @@ This module installs and setups HBase Cluster, with all services collocated or s
 
 Supported are:
 
-* **Fedora 21**: native packages (tested on HBase 0.98.3)
+* **Fedora**: native packages (tested on HBase 0.98.3)
 * **Debian 7/wheezy**: Cloudera distribution (tested on HBase 0.98.6)
 * **RHEL 6 and clones**: Cloudera distribution (tested on HBase 1.0.0)
 
