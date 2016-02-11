@@ -11,6 +11,7 @@ class hbase::common::daemons::config {
   }
 
   if $hbase::features["hbmanager"] {
+    $backup_hostnames = $hbase::backup_hostnames
     $rest_hostnames = $hbase::rest_hostnames
     $thrift_hostnames = $hbase::thrift_hostnames
     $slaves = $hbase::slaves

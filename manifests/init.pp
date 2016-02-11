@@ -8,6 +8,7 @@ class hbase (
 
   $hdfs_hostname,
   $master_hostname = undef,
+  $backup_hostnames = undef,
   $rest_hostnames = undef,
   $thrift_hostnames = undef,
   $zookeeper_hostnames,

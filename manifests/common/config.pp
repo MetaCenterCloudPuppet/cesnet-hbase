@@ -1,11 +1,26 @@
 class hbase::common::config {
-  $realm = $hbase::realm
+  $realm = $::hbase::realm
+  $backup_hostnames = $::hbase::backup_hostnames
 
   file { "${hbase::confdir}/hbase-site.xml":
     owner   => 'root',
     group   => 'root',
     alias   => 'hbase-site.xml',
     content => template('hbase/hbase-site.xml.erb'),
+  }
+
+  if $backup_hostnames {
+    file { "${hbase::confdir}/backup-masters":
+      owner   => 'root',
+      group   => 'root',
+      alias   => 'backup-masters',
+      content => template('hbase/backup-masters.erb'),
+    }
+  } else {
+    file { "${hbase::confdir}/backup-masters":
+      ensure => absent,
+      alias  => 'backup-masters',
+    }
   }
 
   file { "${hbase::confdir}/regionservers":

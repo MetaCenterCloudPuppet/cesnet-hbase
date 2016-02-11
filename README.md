@@ -13,6 +13,7 @@
     * [HBase REST and Thrift API](#apis)
     * [Enable HTTPS](#https)
     * [Multihome Support](#multihome)
+    * [High Availability](#ha)
     * [Cluster with more HDFS Name nodes](#multinn)
     * [Upgrade](#upgrade)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -51,7 +52,7 @@ Puppet 3.x is required.
  * alternatives are used for /etc/hbase/conf in Cloudera
  * this module switches to the new alternative by default, so the Cloudera original configuration can be kept intact
 * Services:
- * master (main server)
+ * master (main server, backup servers)
  * regionserver (slaves)
  * internal zookeeper (quorum) - not in all distributions, better to use external zookeeper
 * Helper Files:
@@ -206,12 +207,32 @@ It can be worked around. For example using NAT.
 
 In this case the HBase will listen on the interface with 10.2.4.12 IP address. If we want to add access from external network 147.251.9.38 using NAT:
 
-    # master
+    # master, backup masters
     iptables -t nat -A PREROUTING -p tcp -m tcp -d 147.251.9.38 --dport 60000 -j DNAT --to-destination 10.2.4.12:60000
     # regionservers
     iptables -t nat -A PREROUTING -p tcp -m tcp -d 147.251.9.38 --dport 60020 -j DNAT --to-destination 10.2.4.12:60020
 
 NAT works OK also with security enabled, you may need *noaddresses = yes* in */etc/krb5.conf*.
+
+<a name="ha"></a>
+###High Availability
+
+For HBase Master high availability you need to include class *hbase::master* on multiple nodes, put the main HBase Master into *master_hostname* parameter, and all other into *backup_hostnames* parameter as an array:
+
+    class{'hbase':
+      ...
+      master_hostname  => $hbase_master1,
+      backup_hostnames => [$hbase_master2],
+      ...
+    }
+
+    node $hbase_master1 {
+      include ::hbase::master
+    }
+
+    node $hbase_master2 {
+      include ::hbase::master
+    }
 
 <a name="multinn"></a>
 ###Cluster with more HDFS Name nodes
@@ -293,6 +314,10 @@ For example:
 <a name="class-hbase"></a>
 <a name="parameters"></a>
 ###`hbase` class parameters
+
+####`backup_hostnames`
+
+Hostnames of all backup masters. Default: undef.
 
 ####`hdfs_hostname`
 

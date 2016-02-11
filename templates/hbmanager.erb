@@ -26,29 +26,39 @@ while [ -n "$1" ]; do
 		rm -rfv /var/log/hbase/* 2>/dev/null || :
 		;;
 	start|restart|*)
-<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>		echo "<%= zk -%> $1"; service <%= zk -%> $1
+<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>
+		echo "<%= zk -%> $1"; service <%= zk -%> $1
 <%end-%>
-<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>		echo "<%= m -%> $1"; service <%= m -%> $1
+<%if scope.lookupvar('hbase::master_hostname') == @fqdn or (@backup_hostnames and @backup_hostnames.include? @fqdn) -%>
+		echo "<%= m -%> $1"; service <%= m -%> $1
 <%end-%>
-<%if @slaves and @slaves.include? @fqdn -%>		echo "<%= rs -%> $1"; service <%= rs -%> $1&
+<%if @slaves and @slaves.include? @fqdn -%>
+		echo "<%= rs -%> $1"; service <%= rs -%> $1&
 <%end-%>
-<%if @rest_hostnames and @rest_hostnames.include? @fqdn -%>		echo "<%= rests -%> $1"; service <%= rests -%> $1&
+<%if @rest_hostnames and @rest_hostnames.include? @fqdn -%>
+		echo "<%= rests -%> $1"; service <%= rests -%> $1&
 <%end-%>
-<%if @thrift_hostnames and @thrift_hostnames.include? @fqdn -%>		echo "<%= ts -%> $1"; service <%= ts -%> $1&
+<%if @thrift_hostnames and @thrift_hostnames.include? @fqdn -%>
+		echo "<%= ts -%> $1"; service <%= ts -%> $1&
 <%end-%>
 		wait
 		;;
 	stop)
-<%if @slaves and @slaves.include? @fqdn -%>		echo "<%= rs -%> $1"; service <%= rs -%> $1&
+<%if @slaves and @slaves.include? @fqdn -%>
+		echo "<%= rs -%> $1"; service <%= rs -%> $1&
 <%end-%>
-<%if @rest_hostnames and @rest_hostnames.include? @fqdn -%>		echo "<%= rests -%> $1"; service <%= rests -%> $1&
+<%if @rest_hostnames and @rest_hostnames.include? @fqdn -%>
+		echo "<%= rests -%> $1"; service <%= rests -%> $1&
 <%end-%>
-<%if @thrift_hostnames and @thrift_hostnames.include? @fqdn -%>		echo "<%= ts -%> $1"; service <%= ts -%> $1&
+<%if @thrift_hostnames and @thrift_hostnames.include? @fqdn -%>
+		echo "<%= ts -%> $1"; service <%= ts -%> $1&
 <%end-%>
 		wait
-<%if scope.lookupvar('hbase::master_hostname') == @fqdn -%>		echo "<%= m -%> $1"; service <%= m -%> $1
+<%if scope.lookupvar('hbase::master_hostname') == @fqdn or (@backup_hostnames and @backup_hostnames.include? @fqdn) -%>
+		echo "<%= m -%> $1"; service <%= m -%> $1
 <%end-%>
-<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>		echo "<%= zk -%> $1"; service <%= zk -%> $1
+<%if scope.lookupvar('hbase::zookeeper_hostnames').include? @fqdn and not scope.lookupvar('hbase::external_zookeeper') -%>
+		echo "<%= zk -%> $1"; service <%= zk -%> $1
 <%end-%>
 		;;
 	esac
