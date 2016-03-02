@@ -51,6 +51,8 @@ class hbase (
       'hbase.thrift.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.thrift.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
     }
+  } else {
+    $sec_properties = {}
   }
   if $hbase::https and $hbase::https != 'hdfs' {
     if $https_keystore_keypassword {
@@ -65,6 +67,8 @@ class hbase (
       'hbase.thrift.ssl.keystore.password' => $https_keystore_password,
       'hbase.thrift.ssl.keystore.keypassword' => $keypass,
     }
+  } else {
+    $https_properties = {}
   }
   if $hbase::external_zookeeper {
     $zoo_properties = {}
