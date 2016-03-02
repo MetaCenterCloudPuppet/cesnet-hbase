@@ -3,9 +3,6 @@
 # HBase Cluster setup.
 #
 class hbase (
-  $package_name = $hbase::params::package_name,
-  $service_name = $hbase::params::service_name,
-
   $hdfs_hostname,
   $master_hostname = undef,
   $backup_hostnames = undef,
