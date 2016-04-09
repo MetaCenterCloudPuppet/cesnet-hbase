@@ -63,7 +63,7 @@ class hbase (
     $https_properties = {
       'hadoop.ssl.enabled' => true,
       'hbase.thrift.ssl.enabled' => true,
-      'hbase.thrift.ssl.keystore.store' => $https_keystore,
+      'hbase.thrift.ssl.keystore.store' => "${hbase::hbase_homedir}/keystore.server",
       'hbase.thrift.ssl.keystore.password' => $https_keystore_password,
       'hbase.thrift.ssl.keystore.keypassword' => $keypass,
     }
