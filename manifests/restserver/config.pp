@@ -1,3 +1,7 @@
+# = Class hbase::restserver::config
+#
+# Configuration for HBase REST server.
+#
 class hbase::restserver::config {
   contain hbase::common::config
   contain hbase::common::daemons::config

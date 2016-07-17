@@ -1,3 +1,7 @@
+# = Class hbase::regionserver::config
+#
+# Installs HBase worker.
+#
 class hbase::regionserver::install {
   include stdlib
   contain hbase::common::postinstall

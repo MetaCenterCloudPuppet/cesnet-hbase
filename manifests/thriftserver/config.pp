@@ -1,3 +1,7 @@
+# = Class hbase::thriftserver::config
+#
+# Configuration for HBase Thrift server.
+#
 class hbase::thriftserver::config {
   contain hbase::common::config
   contain hbase::common::daemons::config

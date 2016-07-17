@@ -1,3 +1,7 @@
+# = Class hbase::zookeeper::config
+#
+# Installs internal HBase zookeeper (deprecated, always use external).
+#
 class hbase::zookeeper::install {
   include stdlib
 

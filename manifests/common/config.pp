@@ -1,3 +1,7 @@
+# = Class hbase::common::config
+#
+# Configuration needed for all HBase components.
+#
 class hbase::common::config {
   $realm = $::hbase::realm
   $backup_hostnames = $::hbase::backup_hostnames

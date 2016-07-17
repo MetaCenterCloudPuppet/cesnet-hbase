@@ -1,3 +1,7 @@
+# = Class hbase::master::config
+#
+# Installs HBase master.
+#
 class hbase::master::install {
   include stdlib
   contain hbase::common::postinstall

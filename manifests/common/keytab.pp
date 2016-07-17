@@ -1,3 +1,7 @@
+# = Class hbase::common::keytab
+#
+# Keytab file ownership (deamons and frontend may need it).
+#
 class hbase::common::keytab {
   if $hbase::realm {
     file { '/etc/security/keytab/hbase.service.keytab':

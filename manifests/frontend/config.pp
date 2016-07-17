@@ -1,3 +1,7 @@
+# = Class hbase::frontend::config
+#
+# Configuration for HBase client.
+#
 class hbase::frontend::config {
   contain hbase::common::config
 

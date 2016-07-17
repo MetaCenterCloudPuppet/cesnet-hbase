@@ -1,3 +1,7 @@
+# = Class hbase::thriftserver::install
+#
+# Installs HBase Thrift server.
+#
 class hbase::thriftserver::install {
   include stdlib
   contain hbase::common::postinstall

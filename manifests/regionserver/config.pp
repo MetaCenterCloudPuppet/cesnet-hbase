@@ -1,3 +1,7 @@
+# = Class hbase::regionserver::config
+#
+# Configuration for HBase worker.
+#
 class hbase::regionserver::config {
   contain hbase::common::config
   contain hbase::common::daemons::config

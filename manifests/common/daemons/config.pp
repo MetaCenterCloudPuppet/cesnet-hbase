@@ -1,3 +1,7 @@
+# = Class hbase::common::daemons::config
+#
+# Configuration needed for all HBase daemons.
+#
 class hbase::common::daemons::config {
   contain hbase::common::keytab
 
@@ -52,7 +56,7 @@ class hbase::common::daemons::config {
         require => [
           File["${hbase::configdir_hadoop}/ssl-client.xml"],
           File["${hbase::configdir_hadoop}/ssl-server.xml"],
-        ]
+        ],
       }
 
       # ssl-client.xml and ssl-server.xml
