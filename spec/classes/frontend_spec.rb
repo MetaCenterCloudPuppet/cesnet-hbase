@@ -24,6 +24,7 @@ describe 'hbase::frontend', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('hbase::frontend') }
       it { should contain_class('hbase::frontend::install') }
       it { should contain_class('hbase::frontend::config') }
     end

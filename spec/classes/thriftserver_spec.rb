@@ -24,6 +24,7 @@ describe 'hbase::thriftserver', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('hbase::thriftserver') }
       it { should contain_class('hbase::thriftserver::install') }
       it { should contain_class('hbase::thriftserver::config') }
       it { should contain_class('hbase::thriftserver::service') }

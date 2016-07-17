@@ -24,6 +24,7 @@ describe 'hbase::regionserver', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('hbase::regionserver') }
       it { should contain_class('hbase::regionserver::install') }
       it { should contain_class('hbase::regionserver::config') }
       it { should contain_class('hbase::regionserver::service') }

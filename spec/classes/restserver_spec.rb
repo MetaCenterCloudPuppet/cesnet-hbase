@@ -24,6 +24,7 @@ describe 'hbase::restserver', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('hbase::restserver') }
       it { should contain_class('hbase::restserver::install') }
       it { should contain_class('hbase::restserver::config') }
       it { should contain_class('hbase::restserver::service') }
