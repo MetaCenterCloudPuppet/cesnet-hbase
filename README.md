@@ -1,6 +1,6 @@
 ##HBase
 
-[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase)
+[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-hbase) [![Puppet Forge](https://img.shields.io/puppetforge/v/cesnet/hbase.svg)](https://forge.puppetlabs.com/cesnet/hbase)
 
 ####Table of Contents
 
@@ -32,7 +32,7 @@ This module installs and setups HBase Cluster, with all services collocated or s
 Supported are:
 
 * **Fedora**: native packages (tested on HBase 0.98.3)
-* **Debian 7/wheezy**: Cloudera distribution (tested on HBase 0.98.6)
+* **Debian 7/wheezy**: Cloudera distribution (tested on CDH 5.7.1, HBase 1.2.0)
 * **RHEL 6 and clones**: Cloudera distribution (tested on HBase 1.0.0)
 
 Puppet 3.x is required.
@@ -78,7 +78,7 @@ Be aware of:
 
 * **inter-node dependencies**: Hadoop cluster (the HDFS part) needs to be deployed and running before launching HBase. You should add dependencies on *hadoop::namenode::service* and *hadoop::datanode::service*, if possible (for collocated services) or choose other way (let's fail first puppet launch, use PuppetDB, ...).
 
-* **zookeeper**: Some versions of HBase provides internal zookeeper, but external zookeeper is recommended. You can use cesnet-zookeeper puppet module.
+* **zookeeper**: Some versions of HBase provides internal zookeeper, but external zookeeper is recommended. You can use *cesnet-zookeeper* puppet module.
 
 <a name="beginning-with-hbase"></a>
 ###Beginning with hbase
@@ -171,30 +171,30 @@ Hadoop and also HBase is able to use SPNEGO protocol (="Kerberos tickets through
 HTTPS support requires:
 
 * enabled security (*realm* => ...)
-  * configured Kerberos (/etc/krb5.conf, /etc/krb5.keytab)
-  * /etc/security/keytab/hbase.service.keytab
+  * configured Kerberos (*/etc/krb5.conf*, */etc/krb5.keytab*)
+  * */etc/security/keytab/hbase.service.keytab*
   * enabled security on HDFS
   * enabled security on zookeeper, if external
-* /etc/security/cacerts file (*https_cacerts* parameter) - kept in the place, only permission changed if needed
-* /etc/security/server.keystore file (*https_keystore* parameter) - copied for each daemon user
-* /etc/security/http-auth-signature-secret file (any data, string or blob) - copied for each daemon user
-* /etc/security/keytab/http.service.keytab - copied for each daemon user
+* */etc/security/cacerts* file (*https_cacerts* parameter) - kept in the place, only permission changed if needed
+* */etc/security/server.keystore* file (*https_keystore* parameter) - copied for each daemon user
+* */etc/security/http-auth-signature-secret* file (any data, string or blob) - copied for each daemon user
+* */etc/security/keytab/http.service.keytab* - copied for each daemon user
 
-All files should be available already from installing of Hadoop cluster, no additional files are needed. See cesnet-hadoop puppet module documentation for details.
+All files should be available already from installing of Hadoop cluster, no additional files are needed. See *cesnet-hadoop* puppet module documentation for details.
 
 The following hbase class parameters are used for HTTPS (see also [Parameters](#parameters)):
 
- * *realm* (required for HTTPS) Enable security and Kerberos realm to use.
- * *https* (undef) Enable support for https.
- * *https_keystore* (/etc/security/server.keystore) Certificates keystore file.
- * *https_keystore_password* (changeit) Certificates keystore file password.
- * *https_keystore_keypassword* (undef) Certificates keystore key password.
- * *acl* (undef) If setfacl command is available. *acl* parameter needs to be enabled, if is it enabled also for Hadoop cluster in cesnet-hadoop puppet module.
+ * [*realm*](#realm) (required for HTTPS) Enable security and Kerberos realm to use.
+ * [*https*](#https) (undef) Enable support for https.
+ * [*https_keystore*](#https_keystore) (*/etc/security/server.keystore*) Certificates keystore file.
+ * [*https_keystore_password*](#https_keystore_password) (changeit) Certificates keystore file password.
+ * [*https_keystore_keypassword*](#https_keystore_keypassword) (undef) Certificates keystore key password.
+ * [*acl*](#acl) (undef) If setfacl command is available. *acl* parameter needs to be enabled, if is it enabled also for Hadoop cluster in cesnet-hadoop puppet module.
 
 <a name="multihome"></a>
 ###Multihome Support
 
-There is only limited support of HBase on multiple interfaces (2015-01). Web UI access works fine, but the master and regionserver services listen only on the primary IP address.
+There is only limited support of HBase on multiple interfaces (2016-07). Web UI access works fine, but the master and regionserver services listen only on the primary IP address.
 
 It can be worked around. For example using NAT.
 
