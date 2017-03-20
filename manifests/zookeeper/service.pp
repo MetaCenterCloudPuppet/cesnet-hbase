@@ -4,7 +4,8 @@
 #
 class hbase::zookeeper::service {
   service { $hbase::daemons['zookeeper']:
-    ensure => running,
-    enable => true,
+    ensure   => running,
+    enable   => true,
+    provider => "$hbase::service_provider",
   }
 }

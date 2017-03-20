@@ -4,7 +4,8 @@
 #
 class hbase::restserver::service {
   service { $hbase::daemons['restserver']:
-    ensure => running,
-    enable => true,
+    ensure   => running,
+    enable   => true,
+    provider => "$hbase::service_provider",
   }
 }
