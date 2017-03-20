@@ -3,9 +3,18 @@
 # Starts and setpus HBase REST server service.
 #
 class hbase::restserver::service {
-  service { $hbase::daemons['restserver']:
-    ensure   => running,
-    enable   => true,
-    provider => "$hbase::service_provider",
+  # using the provider to workaround the problem with service status detection
+  # by Cloudera startup scripts
+  if $hbase::service_provider {
+    service { $hbase::daemons['restserver']:
+      ensure   => running,
+      enable   => true,
+      provider => $hbase::service_provider,
+    }
+  } else {
+    service { $hbase::daemons['restserver']:
+      ensure => running,
+      enable => true,
+    }
   }
 }

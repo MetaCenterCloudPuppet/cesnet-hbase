@@ -58,9 +58,10 @@ class hbase::params {
     /Debian|RedHat/ => '/etc/hadoop/conf',
   }
 
-  $service_provider = ${::osfamily} ? {
+  $service_provider = $::osfamily ? {
     /RedHat/ => 'redhat',
     /Debian/ => 'debian',
+    default  => undef,
   }
 
   $descriptions = {
