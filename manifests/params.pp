@@ -58,6 +58,11 @@ class hbase::params {
     /Debian|RedHat/ => '/etc/hadoop/conf',
   }
 
+  $service_provider = ${::osfamily} ? {
+    /RedHat/ => 'redhat',
+    /Debian/ => 'debian',
+  }
+
   $descriptions = {
     'hbase.coprocessor.region.classes' =>  'for enabling full security and ACLs',
     'hbase.rpc.protection' => 'auth-conf, private (10% performance penalty)',

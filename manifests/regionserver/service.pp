@@ -4,7 +4,8 @@
 #
 class hbase::regionserver::service {
   service { $hbase::daemons['regionserver']:
-    ensure => running,
-    enable => true,
+    ensure   => running,
+    enable   => true,
+    provider => "$hbase::service_provider",
   }
 }
