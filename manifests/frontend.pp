@@ -6,7 +6,7 @@ class hbase::frontend {
   include 'hbase::frontend::install'
   include 'hbase::frontend::config'
 
-  Class['hbase::frontend::install'] ->
-  Class['hbase::frontend::config'] ->
-  Class['hbase::frontend']
+  Class['hbase::frontend::install']
+  -> Class['hbase::frontend::config']
+  -> Class['hbase::frontend']
 }

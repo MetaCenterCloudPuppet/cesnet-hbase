@@ -7,8 +7,8 @@ class hbase::thriftserver {
   include 'hbase::thriftserver::config'
   include 'hbase::thriftserver::service'
 
-  Class['hbase::thriftserver::install'] ->
-  Class['hbase::thriftserver::config'] ~>
-  Class['hbase::thriftserver::service'] ->
-  Class['hbase::thriftserver']
+  Class['hbase::thriftserver::install']
+  -> Class['hbase::thriftserver::config']
+  ~> Class['hbase::thriftserver::service']
+  -> Class['hbase::thriftserver']
 }

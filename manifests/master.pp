@@ -7,8 +7,8 @@ class hbase::master {
   include 'hbase::master::config'
   include 'hbase::master::service'
 
-  Class['hbase::master::install'] ->
-  Class['hbase::master::config'] ~>
-  Class['hbase::master::service'] ->
-  Class['hbase::master']
+  Class['hbase::master::install']
+  -> Class['hbase::master::config']
+  ~> Class['hbase::master::service']
+  -> Class['hbase::master']
 }

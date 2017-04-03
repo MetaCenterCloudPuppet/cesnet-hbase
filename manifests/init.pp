@@ -87,9 +87,9 @@ class hbase (
     include hbase::config
     include hbase::service
 
-    Class['hbase::install'] ->
-    Class['hbase::config'] ~>
-    Class['hbase::service'] ->
-    Class['hbase']
+    Class['hbase::install']
+    -> Class['hbase::config']
+    ~> Class['hbase::service']
+    ->Class['hbase']
   }
 }

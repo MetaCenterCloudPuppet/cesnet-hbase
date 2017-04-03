@@ -7,8 +7,8 @@ class hbase::zookeeper {
   include 'hbase::zookeeper::config'
   include 'hbase::zookeeper::service'
 
-  Class['hbase::zookeeper::install'] ->
-  Class['hbase::zookeeper::config'] ~>
-  Class['hbase::zookeeper::service'] ->
-  Class['hbase::zookeeper']
+  Class['hbase::zookeeper::install']
+  -> Class['hbase::zookeeper::config']
+  ~> Class['hbase::zookeeper::service']
+  -> Class['hbase::zookeeper']
 }

@@ -7,8 +7,8 @@ class hbase::restserver {
   include 'hbase::restserver::config'
   include 'hbase::restserver::service'
 
-  Class['hbase::restserver::install'] ->
-  Class['hbase::restserver::config'] ~>
-  Class['hbase::restserver::service'] ->
-  Class['hbase::restserver']
+  Class['hbase::restserver::install']
+  -> Class['hbase::restserver::config']
+  ~> Class['hbase::restserver::service']
+  -> Class['hbase::restserver']
 }

@@ -7,8 +7,8 @@ class hbase::regionserver {
   include 'hbase::regionserver::config'
   include 'hbase::regionserver::service'
 
-  Class['hbase::regionserver::install'] ->
-  Class['hbase::regionserver::config'] ~>
-  Class['hbase::regionserver::service'] ->
-  Class['hbase::regionserver']
+  Class['hbase::regionserver::install']
+  -> Class['hbase::regionserver::config']
+  ~> Class['hbase::regionserver::service']
+  -> Class['hbase::regionserver']
 }
