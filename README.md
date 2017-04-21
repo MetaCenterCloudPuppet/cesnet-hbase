@@ -146,7 +146,7 @@ When using HBase REST with Kerberos (SPNEGO), the credentials should not leak ou
 
     node default {
       ...
-      include hbase::rest
+      include hbase::restserver
     }
 
 **Example Thrift**: HBase Thrift Server (modify *$::fqdn* and *default* to proper values):
@@ -160,7 +160,7 @@ When using HBase REST with Kerberos (SPNEGO), the credentials should not leak ou
 
     node default {
       ...
-      include hbase::thrift
+      include hbase::thriftserver
     }
 
 <a name="https"></a>
