@@ -24,15 +24,20 @@ class hbase (
   $https_keystore_password = 'changeit',
   $https_keystore_keypassword = undef,
   $perform = $hbase::params::perform,
+  $version = 1,
 ) inherits hbase::params {
   include stdlib
 
   if $hbase::realm and $hbase::realm != '' {
-    $sec_properties = {
+    $sec_base_properties = {
       'hadoop.security.authorization' => true,
       'hadoop.proxyuser.hbase.groups' => $hbase::group,
       'hadoop.proxyuser.hbase.hosts'  => '*',
       'hbase.security.authentication' => 'kerberos',
+      'hbase.security.authentication.spnego.kerberos.keytab' => "${hbase::hbase_homedir}/hadoop.keytab",
+      'hbase.security.authentication.spnego.kerberos.principal' => "HTTP/_HOST@${hbase::realm}",
+      'hbase.security.authentication.signature.secret.file' => "${hbase::hbase_homedir}/http-auth-signature-secret",
+      'hbase.security.authentication.ui' => 'kerberos',
       'hbase.master.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.master.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
       'hbase.regionserver.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
@@ -46,11 +51,23 @@ class hbase (
       'hbase.rest.authentication.kerberos.keytab' => "${hbase::hbase_homedir}/hadoop.keytab",
       'hbase.rest.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.rest.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
-      'hbase.rpc.protection' => 'auth-conf',
       'hbase.rpc.engine' => 'org.apache.hadoop.hbase.ipc.SecureRpcEngine',
       'hbase.thrift.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.thrift.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
     }
+    case $version {
+      /^1(\..*)?$/: {
+        $sec_versioned_properties = {
+          'hbase.rpc.protection' => 'auth-conf',
+        }
+      }
+      default: {
+        $sec_versioned_properties = {
+          'hbase.rpc.protection' => 'privacy',
+        }
+      }
+    }
+    $sec_properties = merge($sec_base_properties, $sec_versioned_properties)
   } else {
     $sec_properties = {}
   }
@@ -62,6 +79,7 @@ class hbase (
     }
     $https_properties = {
       'hadoop.ssl.enabled' => true,
+      'hbase.ssl.enabled' => true,
       'hbase.thrift.ssl.enabled' => true,
       'hbase.thrift.ssl.keystore.store' => "${hbase::hbase_homedir}/keystore.server",
       'hbase.thrift.ssl.keystore.password' => $https_keystore_password,

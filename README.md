@@ -427,6 +427,14 @@ If not specified, *https\_keystore\_password* is used.
 
 Default: undef.
 
+#####`version`
+
+HBase version. Default: '1'.
+
+HBase version to distinguish differences between HBase 1.2.x and HBase 2.1.x:
+
+* different values for *hbase.rpc.protection*
+
 <a name="limitations"></a>
 ##Limitations
 
