@@ -35,8 +35,6 @@ Supported are:
 * **Debian 7/wheezy**: Cloudera distribution (tested on CDH 5.7.1, HBase 1.2.0)
 * **RHEL 6 and clones**: Cloudera distribution (tested on HBase 1.0.0)
 
-Puppet 3.x is required.
-
 <a name="setup"></a>
 ##Setup
 
@@ -447,4 +445,3 @@ See [Setup Requirements](#setup-requirements) section.
 * Tests:
  * basic: see *.travis.yml*
  * vagrant: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
-* Email: František Dvořák &lt;valtri@civ.zcu.cz&gt;

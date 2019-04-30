@@ -1,6 +1,6 @@
 {
   "name": "cesnet-hbase",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Frantisek Dvorak <valtri@civ.zcu.cz>",
   "summary": "HBase Cluster",
   "license": "MIT",
@@ -18,11 +18,10 @@
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": ["7", "8"]
+      "operatingsystemrelease": ["7", "8", "9"]
     },
     {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": ["24", "25", "26"]
+      "operatingsystem": "Fedora"
     },
     {
       "operatingsystem": "RedHat",
@@ -34,13 +33,13 @@
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": ["14.04"]
+      "operatingsystemrelease": ["14.04", "16.04", "18.04"]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": "3.x"
+      "version_requirement": ">= 3.4.0"
     }
   ],
   "dependencies": [
