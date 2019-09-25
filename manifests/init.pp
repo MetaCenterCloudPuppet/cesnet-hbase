@@ -55,7 +55,7 @@ class hbase (
       'hbase.thrift.keytab.file' => '/etc/security/keytab/hbase.service.keytab',
       'hbase.thrift.kerberos.principal' => "hbase/_HOST@${hbase::realm}",
     }
-    case $version {
+    case "${::hbase::version}." {
       /^1(\..*)?$/: {
         $sec_versioned_properties = {
           'hbase.rpc.protection' => 'auth-conf',
