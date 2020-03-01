@@ -24,7 +24,7 @@ class hbase (
   $https_keystore_password = 'changeit',
   $https_keystore_keypassword = undef,
   $perform = $hbase::params::perform,
-  $version = 1,
+  $version = 2,
 ) inherits hbase::params {
   include stdlib
 

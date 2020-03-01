@@ -427,7 +427,7 @@ Default: undef.
 
 #####`version`
 
-HBase version. Default: '1'.
+HBase version. Default: 2.
 
 HBase version to distinguish differences between HBase 1.2.x and HBase 2.1.x:
 
