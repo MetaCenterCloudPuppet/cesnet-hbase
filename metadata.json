@@ -49,7 +49,7 @@
     },
     {
       "name": "cesnet/hadoop",
-      "version_requirement": ">= 0.9.4 <3.0.0"
+      "version_requirement": ">= 0.9.4 <4.0.0"
     },
     {
       "name": "cesnet/hadoop_lib",
